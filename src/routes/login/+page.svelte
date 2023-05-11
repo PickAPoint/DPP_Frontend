@@ -90,7 +90,7 @@
             <div class="text-sm font-medium text-gray-500 dark:text-gray-300">
                 Not registered? 
                 <a href="/register" class="text-primary-700 hover:underline dark:text-primary-500">
-                    Create account
+                    Become a Pick-up Point
                 </a>
             </div>
         </form>
