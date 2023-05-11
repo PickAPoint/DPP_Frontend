@@ -1,5 +1,4 @@
 <script>
-    import "../../app.css";
     import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Button, Modal, Input, Label } from 'flowbite-svelte';
 	  import Stats from "./Stats.svelte";
 
@@ -102,6 +101,10 @@
                   </TableBodyRow>
                 </TableBody>
               </Table>
+
+              <div class="text-center mt-2">
+                <a href="/pickupPoint/packages" class="text-primary-500">See all stored packages</a>
+              </div>
         </div>
     </div>
 
