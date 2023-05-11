@@ -1,5 +1,6 @@
 <script>
-    import { Card, Button, Label, Input, Checkbox } from "flowbite-svelte";
+    import { Card, Button, Label, Input } from "flowbite-svelte";
+    import { goto } from '$app/navigation';
     import IoIosSend from 'svelte-icons/io/IoIosSend.svelte'
 
     let formData = {
@@ -103,6 +104,7 @@
             <div class="h-40 text-center"><IoIosSend class="mx-auto mb-4 w-2"/></div>
             <div class="text-center">
                 <p class="text-3xl">Thank you for your application, we will review it and get back to you through email as soon as possible!</p>
+                <Button color="primary" class="mt-4" on:click={() => goto('/')}>Back to Home</Button>
             </div>
         </div>
     </div>
