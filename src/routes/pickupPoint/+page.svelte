@@ -1,6 +1,8 @@
 <script>
     import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Button, Modal, Input, Label } from 'flowbite-svelte';
 	  import Stats from "./Stats.svelte";
+    import BsPlusCircle from "svelte-icons-pack/bs/BsPlusCircle";
+    import Icon from 'svelte-icons-pack/Icon.svelte';
 
     let companyName = "Fnac Aveiro";
     let packageId = "";
@@ -102,8 +104,13 @@
                 </TableBody>
               </Table>
 
-              <div class="text-center mt-2">
-                <a href="/pickupPoint/packages" class="text-primary-500">See all stored packages</a>
+              <div class="flex justify-center items-center mt-3">
+                <div>
+                  <a href="/pickupPoint/packages?filter=stored"><Icon src={ BsPlusCircle} color="#fe795d" className="w-6 h-6 mr-3" /></a>
+                </div>
+                <div>
+                  <a href="/pickupPoint/packages?filter=stored" class="text-primary-500">See all stored packages</a>
+                </div>
               </div>
         </div>
     </div>
@@ -151,6 +158,15 @@
                   </TableBodyRow>
                 </TableBody>
               </Table>
+
+              <div class="flex justify-center items-center mt-3">
+                <div>
+                  <a href="/pickupPoint/packages?filter=expected"><Icon src={ BsPlusCircle} color="#fe795d" className="w-6 h-6 mr-3" /></a>
+                </div>
+                <div>
+                  <a href="/pickupPoint/packages?filter=expected" class="text-primary-500">See all expected packages</a>
+                </div>
+              </div>
         </div>
     </div>
 
@@ -197,6 +213,15 @@
                   </TableBodyRow>
                 </TableBody>
               </Table>
+
+              <div class="flex justify-center items-center mt-3">
+                <div>
+                  <a href="/pickupPoint/packages?filter=forgotten"><Icon src={ BsPlusCircle} color="#fe795d" className="w-6 h-6 mr-3" /></a>
+                </div>
+                <div>
+                  <a href="/pickupPoint/packages?filter=forgotten" class="text-primary-500">See all forgotten packages</a>
+                </div>
+              </div>
         </div>
     </div>
 
@@ -229,6 +254,15 @@
                 </TableBodyRow>
               </TableBody>
             </Table>
+
+            <div class="flex justify-center items-center mt-3">
+              <div>
+                <a href="/pickupPoint/packages?filter=canceled"><Icon src={ BsPlusCircle} color="#fe795d" className="w-6 h-6 mr-3" /></a>
+              </div>
+              <div>
+                <a href="/pickupPoint/packages?filter=canceled" class="text-primary-500">See all canceled packages</a>
+              </div>
+            </div>
       </div>
   </div>
 </div>
