@@ -9,18 +9,17 @@
     let filterOpen = false;
 
     const states = {
-        'order_placed': ['purple', 'Order Placed'],
-        'processing': ['blue', 'Processing'],
-        'in_transit': ['yellow', 'In Transit'],
-        'delivered': ['pink', 'Delivered'],
-        'cancelled': ['red', 'Cancelled'],
-        'collected': ['green', 'Collected']
+        'OrderPlaced': ['purple', 'Order Placed'],
+        'InTransit': ['yellow', 'In Transit'],
+        'Delivered': ['pink', 'Delivered'],
+        'Cancelled': ['red', 'Cancelled'],
+        'Collected': ['green', 'Collected']
     }
 
     const statesPickupPoint = {
-        'stored': ['delivered'],
-        'canceled': ['cancelled'],
-        'expected': ['order_placed', 'processing', 'in_transit']
+        'stored': ['Delivered'],
+        'canceled': ['Cancelled'],
+        'expected': ['OrderPlaced', 'InTransit']
     }
 
     const packages = [
@@ -29,77 +28,63 @@
             clientName: 'John',
             clientSurname: 'Paul',
             lastUpdate: '10/05/2023 14:45:00',
-            status: 'order_placed'
+            status: 'OrderPlaced'
         },
         {
             id: 'AC1SDFD5',
             clientName: 'Mary',
             clientSurname: 'Popins',
             lastUpdate: '10/05/2023 23:45:00',
-            status: 'in_transit'
-        },
-        {
-            id: '121SDFD5',
-            clientName: 'Michael',
-            clientSurname: 'Jackson',
-            lastUpdate: '10/05/2023 12:03:33',
-            status: 'processing'
+            status: 'InTransit'
         },
         {
             id: '12123FD5',
             clientName: 'Michael',
             clientSurname: 'Jackson',
             lastUpdate: '10/05/2023 12:03:33',
-            status: 'collected'
+            status: 'Collected'
         },
         {
             id: 'A4309TD5',
             clientName: 'Ed',
             clientSurname: 'Sheeran',
             lastUpdate: '10/05/2023 14:45:00',
-            status: 'cancelled'
+            status: 'Cancelled'
         },
         {
             id: '76GSDFD5',
             clientName: 'Mary',
             clientSurname: 'Lawrance',
             lastUpdate: '12/09/2023 23:45:00',
-            status: 'delivered'
+            status: 'Delivered'
         },
         {
             id: 'AC343TD5',
             clientName: 'Trevis',
             clientSurname: 'Scott',
             lastUpdate: '10/05/2023 14:45:00',
-            status: 'collected'
+            status: 'Collected'
         },
         {
             id: 'AC1S09D5',
             clientName: 'Beyonce',
             clientSurname: 'Mills',
             lastUpdate: '10/05/2023 23:45:00',
-            status: 'in_transit'
+            status: 'InTransit'
         },
         {
             id: 'A4343TD5',
             clientName: 'Trevis',
             clientSurname: 'Scott',
             lastUpdate: '10/05/2023 14:45:00',
-            status: 'cancelled'
-        },
-        {
-            id: '121SDJD5',
-            clientName: 'Bruno',
-            clientSurname: 'Mars',
-            lastUpdate: '10/05/2023 12:03:33',
-            status: 'processing'
+            status: 'Cancelled'
         },
         {
             id: '76GS26D5',
             clientName: 'Will',
             clientSurname: 'Smith',
             lastUpdate: '12/09/2023 23:45:00',
-            status: 'collected'
+            status: 'Collected'
         }
 
     ]

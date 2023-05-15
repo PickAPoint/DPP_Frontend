@@ -1,19 +1,39 @@
 <script>
-    // @ts-nocheck
-    import { DonutChart } from "@carbon/charts-svelte";
-    import "@carbon/styles/css/styles.css";
-    import "@carbon/charts/styles.css";
+    import { Doughnut } from 'svelte-chartjs';
+    import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale } from 'chart.js';
     import TiUpload from 'svelte-icons/ti/TiUpload.svelte'
     import TiDownload from 'svelte-icons/ti/TiDownload.svelte'
+    ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
 
-    export let data = [];
+    export let packages;
+
+    const data = {
+        labels: ['Stored', 'Expected', 'Forgotten', 'Cancelled'],
+        datasets: [
+        {
+            data: [300, 50, 100, 40],
+            backgroundColor: ['#FF6000', '#FFA559', '#FFE6C7', '#454545']
+        }]
+    };
+
+    const options = {
+        responsive: false,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: true,
+                position: 'bottom',
+            }
+        },
+    };
+
 </script>
 
 
-<div class="grid grid-cols-2 gap-4 my-12">
+<div class="grid lg:grid-cols-2 lg:gap-4 my-12">
 
     <!-- Times -->
-    <div>
+    <div class="my-auto">
         <div class="justify-between items-center my-2 bg-primary-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 rounded-lg border border-gray-200 dark:border-gray-700 shadow-md flex p-4 sm:p-6">
             <div>
                 <p class="text-xl font-light">Last Pick-up</p>
@@ -39,35 +59,8 @@
 
 
     <!-- Chart -->
-    <div>
-        <DonutChart
-            data={data}
-            
-            options={{
-                "resizable": true,
-                "legend": {
-                    "alignment": "center"
-                },
-                "donut": {
-                    "center": {
-                        "label": "Packages"
-                    },
-                    "alignment": "center"
-                },
-                "height": "300px",
-                "toolbar": {
-                    "enabled": false
-                },
-                "color": {
-                    "scale": {
-                        "Stored": "#FF6000",
-                        "Expected": "#FFA559",
-                        "Forgotten": "#FFE6C7",
-                        "Canceled": "#454545"
-                    }
-                }
-            }}
-        />
+    <div class="relative">
+        <Doughnut {data} options={options} class="mx-auto" />
     </div>
 
 </div>

@@ -11,24 +11,7 @@
     let registerPickUpModal = false;
     let registerPickUpConsentModal = false;
 
-    let packages = [
-        {
-            "group": "Stored",
-            "value": 120
-        },
-        {
-            "group": "Expected",
-            "value": 34
-        },
-        {
-            "group": "Forgotten",
-            "value": 10
-        },
-        {
-            "group": "Canceled",
-            "value": 5
-        }
-    ];
+    let packages = [];
 
     function registerPackage() {
         console.log('Register package: ' + packageId);
@@ -57,7 +40,7 @@
         </div>
     </div>
 
-    <Stats data={packages} />
+    <Stats packages={packages} />
 
 
     <div class="mb-16">

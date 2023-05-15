@@ -30,9 +30,11 @@
 	"dependencies": {
 		"@popperjs/core": "^2.11.7",
 		"axios": "^1.4.0",
+		"chart.js": "^4.3.0",
 		"classnames": "^2.3.2",
 		"flowbite": "^1.6.5",
 		"flowbite-svelte": "^0.34.9",
+		"svelte-chartjs": "^3.1.2",
 		"svelte-icons": "^2.1.0",
 		"svelte-icons-pack": "^2.1.0"
 	}

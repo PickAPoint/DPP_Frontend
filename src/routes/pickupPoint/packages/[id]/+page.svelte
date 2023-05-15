@@ -9,31 +9,26 @@
         id: packageId,
         eStore: "PrintPlate",
         orderDate: "10/10/2021 10:23:33",
-        orderState: "collected",
+        orderState: "Collected",
         states: [
             {
                 id: 1,
-                orderState: "order_placed",
-                orderDate: "10/10/2021 10:23:33"
-            },
-            {
-                id: 2,
-                orderState: "processing",
+                orderState: "OrderPlaced",
                 orderDate: "10/10/2021 10:23:33"
             },
             {
                 id: 3,
-                orderState: "in_transit",
+                orderState: "InTransit",
                 orderDate: "10/10/2021 10:23:33"
             },
             {
                 id: 4,
-                orderState: "delivered",
+                orderState: "Delivered",
                 orderDate: "10/10/2021 10:23:33"
             },
             {
                 id: 5,
-                orderState: "collected",
+                orderState: "Collected",
                 orderDate: "10/10/2021 10:23:33"
             }
         ],

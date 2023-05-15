@@ -9,12 +9,11 @@
     import Icon from 'svelte-icons-pack/Icon.svelte';
 
     const states = {
-        'order_placed': ['purple', 'Order Placed'],
-        'processing': ['blue', 'Processing'],
-        'in_transit': ['yellow', 'In Transit'],
-        'delivered': ['pink', 'Delivered'],
-        'cancelled': ['red', 'Cancelled'],
-        'collected': ['green', 'Collected']
+        'OrderPlaced': ['purple', 'Order Placed'],
+        'InTransit': ['yellow', 'In Transit'],
+        'Delivered': ['pink', 'Delivered'],
+        'Cancelled': ['red', 'Cancelled'],
+        'Collected': ['green', 'Collected']
     }
 
     export let packageDetails;
