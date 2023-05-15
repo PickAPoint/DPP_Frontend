@@ -11,15 +11,7 @@
     { id: 1, name: 'Fnac Aveiro', email: 'fnac@ua.ptAveiro', address: 'Fórum Aveiro, R. do Batalhão de Caçadores 10, 3810-064 Aveiro' },
     { id: 2, name: 'McDonalds Aveiro', email: 'mc@ua.pt', address: 'R. Das Pombas, Aveiro, Aveiro 3810-150'},
     { id: 3, name: 'Burger King Aveiro', email: 'bk@ua.pt', address: 'Burger King - Verdemilho, Ic 1 216, 3810-193'},
-    { id: 1, name: 'Fnac Aveiro', email: 'fnac@ua.ptAveiro', address: 'Fórum Aveiro, R. do Batalhão de Caçadores 10, 3810-064 Aveiro' },
-    { id: 2, name: 'McDonalds Aveiro', email: 'mc@ua.pt', address: 'R. Das Pombas, Aveiro, Aveiro 3810-150'},
-    { id: 3, name: 'Burger King Aveiro', email: 'bk@ua.pt', address: 'Burger King - Verdemilho, Ic 1 216, 3810-193'},
-    { id: 1, name: 'Fnac Aveiro', email: 'fnac@ua.ptAveiro', address: 'Fórum Aveiro, R. do Batalhão de Caçadores 10, 3810-064 Aveiro' },
-    { id: 2, name: 'McDonalds Aveiro', email: 'mc@ua.pt', address: 'R. Das Pombas, Aveiro, Aveiro 3810-150'},
-    { id: 3, name: 'Burger King Aveiro', email: 'bk@ua.pt', address: 'Burger King - Verdemilho, Ic 1 216, 3810-193'},
-    { id: 1, name: 'Fnac Aveiro', email: 'fnac@ua.ptAveiro', address: 'Fórum Aveiro, R. do Batalhão de Caçadores 10, 3810-064 Aveiro' },
-    { id: 2, name: 'McDonalds Aveiro', email: 'mc@ua.pt', address: 'R. Das Pombas, Aveiro, Aveiro 3810-150'},
-    { id: 3, name: 'Burger King Aveiro', email: 'bk@ua.pt', address: 'Burger King - Verdemilho, Ic 1 216, 3810-193'},
+    { id: 4, name: 'Pingo Doce Aveiro', email: 'pingodoce@ua.pt', address: 'R. do Batalhão de Caçadores 10, 3810-064 Aveiro'},
   ];
   $: filteredItems = items.filter(
     (item) => item.name.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1
