@@ -2,24 +2,20 @@ import axios from "axios";
 import { API_URL } from "$lib/env";
 
 export const ApiAuth = {
-    login: async function(email, password) {
+
+    login: async function(payload) {
         const url = `${API_URL}/auth/login`;
-        const data = {
-            email: email.toString(),
-            password: password.toString()
-        };
-        const response = await axios.post(url, data);
+
+        const response = await axios.post(url, payload);
         return response.data
     },
-    register: async function(fname, lname, email, password) {
+
+
+    register: async function(payload) {
         const url = `${API_URL}/auth/register`;
-        const data = {
-            "fname": fname.toString(),
-            "lname": lname.toString(),
-            "email": email.toString(),
-            "password": password.toString()
-        };
-        const response = await axios.post(url, data);
-        return response.data === "success";
+
+        const response = await axios.post(url, payload);
+        return response.data;
     }
+
 }
