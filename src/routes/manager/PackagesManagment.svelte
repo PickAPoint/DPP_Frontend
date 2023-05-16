@@ -20,7 +20,7 @@
     <div class="my-3 w-full">
       {#if packages.length === 0}
           <div class="flex justify-center items-center">
-              <p class="text-gray-500 dark:text-gray-400">No PickUp Point Packages found. The either the database is down or there are still no packages </p>
+              <p class="text-gray-500 dark:text-gray-400">No PickUp Point Packages found. Either the database is down or there are still no packages </p>
           </div>
       {:else}
       <Table shadow>
