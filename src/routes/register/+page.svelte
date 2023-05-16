@@ -1,6 +1,7 @@
 <script>
     import { Card, Button, Label, Input } from "flowbite-svelte";
     import { goto } from '$app/navigation';
+    import { ApiAuth } from '$lib/api/ApiAuth';
     import IoIosSend from 'svelte-icons/io/IoIosSend.svelte'
 
     let formData = {
@@ -11,16 +12,27 @@
         address: ''
     }
     let loginError = false;
-    let showLoginForm = true;
+    let showRegisterForm = true;
 
     function handleSubmit() {
-        console.log("API call here");
-        showLoginForm = false;
+        
+        ApiAuth.register(formData)
+            .then(res => {
+                if (res) {
+                    showRegisterForm = false;
+                }
+                else {
+                    loginError = true;
+                }
+            })
+            .catch(err => {
+                loginError = true;
+            })
     }
 
 </script>
 
-{#if showLoginForm}
+{#if showRegisterForm}
     <div class="flex justify-center items-center h-full">
         <Card size='lg' class="w-full">
             <form 
@@ -30,6 +42,17 @@
                 <h3 class="text-xl font-medium text-gray-900 dark:text-white">
                     Become a Pick-up Point
                 </h3>
+
+                <Label class="space-y-2">
+                    <span>Name</span>
+                    <Input 
+                        type="text"
+                        name="companyName"
+                        placeholder="Business Name"
+                        required
+                        bind:value={formData.name}
+                    />
+                </Label>
 
                 <Label class="space-y-2">
                     <span>Email</span>
@@ -50,17 +73,6 @@
                         placeholder="•••••" 
                         required
                         bind:value={formData.password}
-                    />
-                </Label>
-
-                <Label class="space-y-2">
-                    <span>Name</span>
-                    <Input 
-                        type="text"
-                        name="companyName"
-                        placeholder="Business Name"
-                        required
-                        bind:value={formData.name}
                     />
                 </Label>
 
@@ -87,7 +99,7 @@
                 </Label>
 
                 {#if loginError}
-                    <p class="text-red-500">Invalid email or password.</p>
+                    <p class="text-red-500">Email already exists</p>
                 {/if}
 
                 <Button color="primary" type="submit" class="w-full">
