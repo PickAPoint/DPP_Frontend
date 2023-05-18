@@ -1,42 +1,43 @@
 <script>
-    import { Card, Button, Label, Input, Checkbox } from "flowbite-svelte";
 	import { session } from '$lib/session';
     import { goto } from '$app/navigation';
+    import { Card, Button, Label, Input, Checkbox, Alert } from "flowbite-svelte";
     import { ApiAuth } from '$lib/api/ApiAuth.js';
+    
 
+    let loginError = false;
     let formData = {
         email: '',
         password: '',
-        remember: false,
+        remember: true,
     }
-    let loginError = false;
+
 
     function handleSubmit() {
-        ApiAuth.login(
-            formData.email,
-            formData.password,
-        )
+        ApiAuth.login({ email: formData.email, password: formData.password})
         .then((data) => {
             if (data === "") {
                 loginError = true;
                 return
             }
-            const details = {
-                userId: data.id,
-                userFname: data.fname,
-                userLname: data.lname,
-                userEmail: data.email,
-                token: ''
-            }
+            const details = data;
             session.set(details);
+
             if (formData.remember) {
                 localStorage.setItem('session', JSON.stringify(details));
             }
-            goto('/');
+            
+            if (data.type === 'Admin') {
+                goto('/manager');
+            }
+            else if (data.type === 'Partner') {
+                goto('/pickupPoint');
+            }
         })
     }
 
 </script>
+
 
 <div class="flex justify-center items-center h-full">
     <Card size='lg' class="w-full">
@@ -78,9 +79,9 @@
             </div>
 
             {#if loginError}
-                <div class="text-center text-red-500">
-                    Invalid credentials
-                </div>
+                <Alert color="red">
+                    <span class="font-medium">Error!</span> Invalid credentials or account waiting for approval.
+                </Alert>
             {/if}
 
             <Button color="primary" type="submit" class="w-full">

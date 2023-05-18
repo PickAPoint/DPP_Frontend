@@ -1,10 +1,10 @@
 import { writable } from 'svelte/store';
 
 export const session = writable({
-    userId: undefined,
-    userType: undefined,
-    userFname: undefined,
-    userLname: undefined,
-    userEmail: undefined,
+    id: undefined,
+    type: undefined,
+    name: undefined,
+    email: undefined,
+    address: undefined,
     token: undefined
 });

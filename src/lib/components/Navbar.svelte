@@ -1,24 +1,16 @@
 <script>
-  import { 
-    Navbar, 
-    NavBrand, 
-    NavLi, 
-    NavUl, 
-    NavHamburger, 
-    DarkMode,
-    Button
-  } from 'flowbite-svelte'
+  import { Navbar, NavBrand, NavLi, NavUl, NavHamburger, DarkMode, Button } from 'flowbite-svelte'
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
   import { session } from '$lib/session';
 
   function handleLogout() {
     session.set({
-      userId: undefined,
-      userFname: undefined,
-      userLname: undefined,
-      userEmail: undefined,
-      token: undefined,
+      id: undefined,
+      name: undefined,
+      email: undefined,
+      address: undefined,
+      token: undefined
     })
     localStorage.removeItem('session');
     goto('/');
@@ -38,14 +30,30 @@
 
   <div class="flex items-center md:order-2 w-52 justify-end">
     <DarkMode class="mr-3" />
-    <Button color="primary" href="login">Login</Button>
+
+    {#if $session.id}
+      <Button color="primary" on:click={handleLogout}>Logout</Button>
+    {:else}
+      <Button color="primary" href="login">Login</Button>
+    {/if}
+
     <NavHamburger on:click={toggle} class1="w-full md:flex md:w-auto md:order-1"/>
   </div>
 
   <NavUl {hidden}>
-    <!-- <NavLi class="hover:text-primary-700 md:hover:text-primary-700 lg:hover:text-primary-700" href="/">Home</NavLi>
-    <NavLi class="hover:text-primary-700 md:hover:text-primary-700 lg:hover:text-primary-700" href="/products">Products</NavLi>
-    <NavLi class="hover:text-primary-700 md:hover:text-primary-700 lg:hover:text-primary-700" href="/about">About</NavLi> -->
+
+    {#if $session.id}
+      
+      {#if $session.type === 'Admin'}
+        <NavLi href="/manager">TODO</NavLi>
+      {:else if $session.type === 'Partner'}
+        <NavLi class="hover:text-primary-700 md:hover:text-primary-700 lg:hover:text-primary-700" href="/pickupPoint">Dashboard</NavLi>
+        <NavLi class="hover:text-primary-700 md:hover:text-primary-700 lg:hover:text-primary-700" href="/pickupPoint/packages">Packages</NavLi>
+        <NavLi class="hover:text-primary-700 md:hover:text-primary-700 lg:hover:text-primary-700" href="/pickupPoint/operations">Operations</NavLi>
+      {/if}
+
+    {/if}
+
   </NavUl>
 
 </Navbar>
