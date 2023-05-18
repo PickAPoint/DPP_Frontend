@@ -1,5 +1,5 @@
 <script>
-    import { Card, Button, Label, Input } from "flowbite-svelte";
+    import { Card, Button, Label, Input, Alert } from "flowbite-svelte";
     import { goto } from '$app/navigation';
     import { ApiAuth } from '$lib/api/ApiAuth';
     import IoIosSend from 'svelte-icons/io/IoIosSend.svelte'
@@ -99,7 +99,9 @@
                 </Label>
 
                 {#if loginError}
-                    <p class="text-red-500">Email already exists</p>
+                    <Alert color="red">
+                        <span class="font-medium">Error!</span> Email already exists.
+                    </Alert>
                 {/if}
 
                 <Button color="primary" type="submit" class="w-full">
