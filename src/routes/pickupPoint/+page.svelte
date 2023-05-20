@@ -147,7 +147,9 @@
 
                       {#each filteredPackages['stored'] as p}
                         <TableBodyRow>
-                          <TableBodyCell>{p.id}</TableBodyCell>
+                          <TableBodyCell>
+                            <a href={"pickupPoint/packages/" + p.id} class="underline">{p.id}</a>
+                          </TableBodyCell>
                           <TableBodyCell>{p.states[p.states.length - 1].orderDate.split("T")[0]}</TableBodyCell>
                           <TableBodyCell>{p.states[p.states.length - 1].orderDate.split("T")[1].split(".")[0]}</TableBodyCell>
                           <TableBodyCell>{p.client.fname + " " + p.client.lname}</TableBodyCell>
@@ -189,7 +191,9 @@
 
                       {#each filteredPackages['expected'] as p}
                         <TableBodyRow>
-                          <TableBodyCell>{p.id}</TableBodyCell>
+                          <TableBodyCell>
+                            <a href={"pickupPoint/packages/" + p.id} class="underline">{p.id}</a>
+                          </TableBodyCell>
                           <TableBodyCell>{p.states[p.states.length - 1].orderDate.split("T")[0]}</TableBodyCell>
                           <TableBodyCell>{p.states[p.states.length - 1].orderDate.split("T")[1].split(".")[0]}</TableBodyCell>
                           <TableBodyCell>{p.client.fname + " " + p.client.lname}</TableBodyCell>
@@ -235,7 +239,9 @@
                     
                     {#each filteredPackages['cancelled'] as p}
                       <TableBodyRow>
-                        <TableBodyCell>{p.id}</TableBodyCell>
+                        <TableBodyCell>
+                          <a href={"pickupPoint/packages/" + p.id} class="underline">{p.id}</a>
+                        </TableBodyCell>
                         <TableBodyCell>{p.states[p.states.length - 1].orderDate.split("T")[0]}</TableBodyCell>
                         <TableBodyCell>{p.states[p.states.length - 1].orderDate.split("T")[1].split(".")[0]}</TableBodyCell>
                         <TableBodyCell>{p.client.fname + " " + p.client.lname}</TableBodyCell>
