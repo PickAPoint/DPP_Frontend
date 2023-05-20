@@ -10,4 +10,11 @@ export const ApiPickupPoint = {
         return response.data
     },
 
+    getPackage: async function(packageId) {
+        const url = `${API_URL}/partner/package/${packageId}`;
+
+        const response = await axios.get(url);
+        return response.data
+    },
+
 }

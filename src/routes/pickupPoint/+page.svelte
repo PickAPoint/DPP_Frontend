@@ -5,7 +5,9 @@
   import { goto } from '$app/navigation';
   import { session } from '$lib/session';
   import { ApiPickupPoint } from '$lib/api/ApiPickupPoint';
-  import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Button, Modal, Input, Label, Badge, Skeleton } from 'flowbite-svelte';
+  import { Dates } from '$lib/utils/Dates';
+  import Loading from "$lib/components/Loading.svelte";
+  import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Button, Modal, Input, Label, Badge } from 'flowbite-svelte';
   import BsPlusCircle from "svelte-icons-pack/bs/BsPlusCircle";
   import Icon from 'svelte-icons-pack/Icon.svelte';
 
@@ -46,14 +48,6 @@
         console.log(err);
       })
   })
-
-
-  function getDaysBetweenDates(firstDate, secondDate) {
-    const oneDay = 24 * 60 * 60 * 1000;
-    const timeDifference = Math.abs(firstDate - secondDate);
-    const numberOfDays = Math.round(timeDifference / oneDay);
-    return numberOfDays;
-  }
 
 
   function filterPackages() {
@@ -101,12 +95,7 @@
 
 {#if loading}
 
-  <div class="container my-12">
-    <Skeleton size="sm" class="my-8" />
-    <Skeleton size="md" class="my-8" />
-    <Skeleton size="lg" class="my-8" />
-    <Skeleton size="xl" class="my-8" />
-  </div>
+  <Loading />
 
 {:else}
 
@@ -150,10 +139,22 @@
                           <TableBodyCell>
                             <a href={"pickupPoint/packages/" + p.id} class="underline">{p.id}</a>
                           </TableBodyCell>
-                          <TableBodyCell>{p.states[p.states.length - 1].orderDate.split("T")[0]}</TableBodyCell>
-                          <TableBodyCell>{p.states[p.states.length - 1].orderDate.split("T")[1].split(".")[0]}</TableBodyCell>
-                          <TableBodyCell>{p.client.fname + " " + p.client.lname}</TableBodyCell>
-                          <TableBodyCell>{getDaysBetweenDates(new Date(p.states[p.states.length - 1].orderDate), new Date())} days</TableBodyCell>
+
+                          <TableBodyCell>
+                            {Dates.getFormattedDateTime(p.states[p.states.length - 1].orderDate).split(" ")[0]}
+                          </TableBodyCell>
+                          
+                          <TableBodyCell>
+                            {Dates.getFormattedDateTime(p.states[p.states.length - 1].orderDate).split(" ")[1]}
+                          </TableBodyCell>
+
+                          <TableBodyCell>
+                            {p.client.fname + " " + p.client.lname}
+                          </TableBodyCell>
+
+                          <TableBodyCell>
+                            {Dates.getDaysBetweenDates(new Date(p.states[p.states.length - 1].orderDate), new Date())} days
+                          </TableBodyCell>
                         </TableBodyRow>
                       {/each}
 
@@ -194,9 +195,19 @@
                           <TableBodyCell>
                             <a href={"pickupPoint/packages/" + p.id} class="underline">{p.id}</a>
                           </TableBodyCell>
-                          <TableBodyCell>{p.states[p.states.length - 1].orderDate.split("T")[0]}</TableBodyCell>
-                          <TableBodyCell>{p.states[p.states.length - 1].orderDate.split("T")[1].split(".")[0]}</TableBodyCell>
-                          <TableBodyCell>{p.client.fname + " " + p.client.lname}</TableBodyCell>
+
+                          <TableBodyCell>
+                            {Dates.getFormattedDateTime(p.states[p.states.length - 1].orderDate).split(" ")[0]}
+                          </TableBodyCell>
+                          
+                          <TableBodyCell>
+                            {Dates.getFormattedDateTime(p.states[p.states.length - 1].orderDate).split(" ")[1]}
+                          </TableBodyCell>
+
+                          <TableBodyCell>
+                            {p.client.fname + " " + p.client.lname}
+                          </TableBodyCell>
+
                           <TableBodyCell>
                             <Badge color={states[p.orderState][0]}>{states[p.orderState][1]}</Badge>
                           </TableBodyCell>
@@ -242,9 +253,19 @@
                         <TableBodyCell>
                           <a href={"pickupPoint/packages/" + p.id} class="underline">{p.id}</a>
                         </TableBodyCell>
-                        <TableBodyCell>{p.states[p.states.length - 1].orderDate.split("T")[0]}</TableBodyCell>
-                        <TableBodyCell>{p.states[p.states.length - 1].orderDate.split("T")[1].split(".")[0]}</TableBodyCell>
-                        <TableBodyCell>{p.client.fname + " " + p.client.lname}</TableBodyCell>
+
+                        <TableBodyCell>
+                          {Dates.getFormattedDateTime(p.states[p.states.length - 1].orderDate).split(" ")[0]}
+                        </TableBodyCell>
+                        
+                        <TableBodyCell>
+                          {Dates.getFormattedDateTime(p.states[p.states.length - 1].orderDate).split(" ")[1]}
+                        </TableBodyCell>
+
+                        <TableBodyCell>
+                          {p.client.fname + " " + p.client.lname}
+                        </TableBodyCell>
+                        
                         <TableBodyCell>
                           <Badge color={states[p.orderState][0]}>{states[p.orderState][1]}</Badge>
                         </TableBodyCell>

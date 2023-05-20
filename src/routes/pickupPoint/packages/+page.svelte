@@ -5,7 +5,9 @@
     import { fly } from 'svelte/transition';
     import { session } from '$lib/session';
     import { ApiPickupPoint } from '$lib/api/ApiPickupPoint';
-    import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Badge, Button, Dropdown, DropdownItem, Skeleton, DropdownDivider } from 'flowbite-svelte';
+    import { Dates } from '$lib/utils/Dates';
+    import Loading from "$lib/components/Loading.svelte";
+    import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Badge, Button, Dropdown, DropdownItem, DropdownDivider } from 'flowbite-svelte';
     import Icon from 'svelte-icons-pack/Icon.svelte';
     import RiSystemFilterFill from "svelte-icons-pack/ri/RiSystemFilterFill";
 
@@ -60,12 +62,7 @@
 
 {#if loading}
 
-  <div class="container my-12">
-    <Skeleton size="sm" class="my-8" />
-    <Skeleton size="md" class="my-8" />
-    <Skeleton size="lg" class="my-8" />
-    <Skeleton size="xl" class="my-8" />
-  </div>
+    <Loading />
 
 {:else}
     <div
@@ -117,7 +114,7 @@
                                 </TableBodyCell>
 
                                 <TableBodyCell>
-                                    {p.states[p.states.length - 1].orderDate.split("T")[0] + " " + p.states[p.states.length - 1].orderDate.split("T")[1].split(".")[0]}
+                                    {Dates.getFormattedDateTime(p.states[p.states.length - 1].orderDate)}
                                 </TableBodyCell>
 
                                 <TableBodyCell>
