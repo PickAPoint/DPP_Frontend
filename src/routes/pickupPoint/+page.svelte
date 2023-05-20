@@ -62,19 +62,12 @@
       'expected': [],
       'stored': [],
       'cancelled': [],
-      'forgotten': [],
       'collected': []
     }
 
     packages.forEach((p) => {
       if (p.orderState === 'Delivered') {
         packagesFiltered.stored.push(p);
-        
-        const lastState = p.states[p.states.length - 1];
-
-        if (getDaysBetweenDates(new Date(lastState.orderDate), new Date()) > 30) {
-          packagesFiltered.forgotten.push(p);
-        }
       }
       else if (p.orderState === 'Cancelled') {
         packagesFiltered.cancelled.push(p);
@@ -219,51 +212,8 @@
                   </div>
                 </div>
           {/if}
-
       </div>
 
-      <div class="mb-16">
-          <p class="text-2xl font-light">Forgotten Packages</p>
-
-          {#if filteredPackages['forgotten'].length === 0}
-            <p class="font-light text-center dark:text-gray-600 text-gray-400">No forgotten packages</p>
-          {:else}
-
-            <div class="my-3">
-              <Table shadow>
-                <TableHead class="bg-primary-200">
-                  <TableHeadCell>Package ID</TableHeadCell>
-                  <TableHeadCell>Arrival Date</TableHeadCell>
-                  <TableHeadCell>Arrival Time</TableHeadCell>
-                  <TableHeadCell>Client</TableHeadCell>
-                  <TableHeadCell>Time Stored</TableHeadCell>
-                </TableHead>
-                <TableBody class="divide-y">
-
-                  {#each filteredPackages['forgotten'] as p}
-                    <TableBodyRow>
-                      <TableBodyCell>{p.id}</TableBodyCell>
-                      <TableBodyCell>{p.states[p.states.length - 1].orderDate.split("T")[0]}</TableBodyCell>
-                      <TableBodyCell>{p.states[p.states.length - 1].orderDate.split("T")[1].split(".")[0]}</TableBodyCell>
-                      <TableBodyCell>{p.client.fname + " " + p.client.lname}</TableBodyCell>
-                      <TableBodyCell>{getDaysBetweenDates(new Date(p.states[p.states.length - 1].orderDate), new Date())} days</TableBodyCell>
-                    </TableBodyRow>
-                  {/each}
-
-                </TableBody>
-              </Table>
-
-                  <div class="flex justify-center items-center mt-3">
-                    <div>
-                      <a href="/pickupPoint/packages?filter=forgotten"><Icon src={ BsPlusCircle} color="#fe795d" className="w-6 h-6 mr-3" /></a>
-                    </div>
-                    <div>
-                      <a href="/pickupPoint/packages?filter=forgotten" class="text-primary-500">See all forgotten packages</a>
-                    </div>
-                  </div>
-            </div>
-          {/if}
-      </div>
 
       <div class="mb-16">
         <p class="text-2xl font-light">Canceled Packages</p>

@@ -9,11 +9,11 @@
     export let packages;
 
     const data = {
-        labels: ['Stored', 'Expected', 'Forgotten', 'Cancelled'],
+        labels: ['Stored', 'Expected', 'Cancelled'],
         datasets: [
         {
-            data: [packages.stored.length, packages.expected.length, packages.forgotten.length, packages.cancelled.length],
-            backgroundColor: ['#FF6000', '#FFA559', '#FFE6C7', '#454545']
+            data: [packages.stored.length, packages.expected.length, packages.cancelled.length],
+            backgroundColor: ['#FF6000', '#FFA559', '#454545']
         }]
     };
 
