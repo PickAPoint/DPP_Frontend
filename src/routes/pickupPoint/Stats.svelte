@@ -3,7 +3,6 @@
     import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale } from 'chart.js';
     import TiUpload from 'svelte-icons/ti/TiUpload.svelte'
     import TiDownload from 'svelte-icons/ti/TiDownload.svelte'
-	import { get } from 'svelte/store';
     ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
 
     export let packages;
@@ -59,7 +58,7 @@
         let lastDate = (tmp.getDate() < 10 ? '0' : '') + tmp.getDate() + '/' + ((tmp.getMonth() + 1) < 10 ? '0' : '') + (tmp.getMonth() + 1) + '/' + tmp.getFullYear();
         let lastTime = tmp.getHours() + ':' + (tmp.getMinutes() < 10 ? '0' : '') + tmp.getMinutes();
 
-        return lastDate + ' ' + lastTime;
+        return lastDate + ' - ' + lastTime;
     }
 
 </script>
