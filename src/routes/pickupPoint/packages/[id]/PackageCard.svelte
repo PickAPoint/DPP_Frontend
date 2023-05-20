@@ -1,4 +1,5 @@
 <script>
+    import { Dates } from '$lib/utils/Dates';
     import { Card, Badge } from "flowbite-svelte";
     import VscPackage from "svelte-icons-pack/vsc/VscPackage";
     import AiOutlineShoppingCart from "svelte-icons-pack/ai/AiOutlineShoppingCart";
@@ -41,7 +42,9 @@
             <div class="items-center flex mt-3">
                 <Icon src={BiCalendar} color="#fe795d" className="w-6 h-6 mr-3" />
                 <span class="text-lg font-semibold tracking-tight text-gray-900 dark:text-white mr-2">Order Date</span>
-                <span class="font-light text-gray-700 dark:text-gray-400 leading-tight">{packageDetails.orderDate}</span>
+                <span class="font-light text-gray-700 dark:text-gray-400 leading-tight">
+                    {Dates.getFormattedDateTime(packageDetails.orderDate)}
+                </span>
             </div>
 
             <div class="items-center flex mt-3">

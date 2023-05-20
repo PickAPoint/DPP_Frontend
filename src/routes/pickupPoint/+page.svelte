@@ -1,254 +1,293 @@
 <script>
-    import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Button, Modal, Input, Label } from 'flowbite-svelte';
-	  import Stats from "./Stats.svelte";
-    import BsPlusCircle from "svelte-icons-pack/bs/BsPlusCircle";
-    import Icon from 'svelte-icons-pack/Icon.svelte';
+  import Stats from "./Stats.svelte";
+  import { onMount } from "svelte";
+  import { fly } from 'svelte/transition';
+  import { goto } from '$app/navigation';
+  import { session } from '$lib/session';
+  import { ApiPickupPoint } from '$lib/api/ApiPickupPoint';
+  import { Dates } from '$lib/utils/Dates';
+  import Loading from "$lib/components/Loading.svelte";
+  import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Button, Modal, Input, Label, Badge } from 'flowbite-svelte';
+  import BsPlusCircle from "svelte-icons-pack/bs/BsPlusCircle";
+  import Icon from 'svelte-icons-pack/Icon.svelte';
 
-    let companyName = "Fnac Aveiro";
-    let packageId = "";
-    let registerPackageModal = false;
-    let registerPackageConsentModal = false;
-    let registerPickUpModal = false;
-    let registerPickUpConsentModal = false;
 
-    let packages = [];
+  let loading = true;
+  let packageId = "";
+  let packages = [];
+  let filteredPackages = {}
 
-    function registerPackage() {
-        console.log('Register package: ' + packageId);
-        registerPackageModal = false;
-        packageId = "";
+  const states = {
+    'OrderPlaced': ['purple', 'Order Placed'],
+    'InTransit': ['yellow', 'In Transit'],
+    'Delivered': ['pink', 'Delivered'],
+    'Cancelled': ['red', 'Cancelled'],
+    'Collected': ['green', 'Collected']
+  }
+
+  let registerPackageModal = false;
+  let registerPackageConsentModal = false;
+  let registerPickUpModal = false;
+  let registerPickUpConsentModal = false;
+
+
+  onMount(async () => {
+    if ($session.id === undefined) {
+      goto('/login');
+      return;
     }
 
-    function registerPickUp() {
-      console.log('Register pick up: ' + packageId);
-      registerPickUpModal = false;
-      packageId = "";
+    //api call to get packages
+    ApiPickupPoint.getPackages($session.id)
+      .then(res => {
+        packages = res;
+        filteredPackages = filterPackages();
+        loading = false;
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  })
+
+
+  function filterPackages() {
+
+    let packagesFiltered = {
+      'expected': [],
+      'stored': [],
+      'cancelled': [],
+      'collected': []
     }
+
+    packages.forEach((p) => {
+      if (p.orderState === 'Delivered') {
+        packagesFiltered.stored.push(p);
+      }
+      else if (p.orderState === 'Cancelled') {
+        packagesFiltered.cancelled.push(p);
+      }
+      else if (p.orderState === 'OrderPlaced' || p.orderState === 'InTransit') {
+        packagesFiltered.expected.push(p);
+      }
+      else if (p.orderState === 'Collected') {
+        packagesFiltered.collected.push(p);
+      }
+    })
+
+    return packagesFiltered;
+  }
+
+
+  function registerPackage() {
+    console.log('Register package: ' + packageId);
+    registerPackageModal = false;
+    packageId = "";
+  }
+
+
+  function registerPickUp() {
+    console.log('Register pick up: ' + packageId);
+    registerPickUpModal = false;
+    packageId = "";
+  }
 
 </script>
 
+{#if loading}
 
-<div class="container my-12">
+  <Loading />
 
-    <div>
-        <p class="text-4xl font-bold inline-block">{companyName}</p>
-        <span class="font-extralight italic mx-1 text-lg">Pick-up Point</span>
-        
-         <div class="mt-4 mb-11">
-             <Button color="primary" on:click={() => registerPackageModal = true}>Register Package</Button>
-             <Button color="primary" on:click={() => registerPickUpModal = true}>Register Pick Up</Button>
-        </div>
-    </div>
+{:else}
 
-    <Stats packages={packages} />
+  <div
+    in:fly={{y: 100, duration: 300, opacity:0}}
+    class="container my-12">
 
-
-    <div class="mb-16">
-        <p class="text-2xl font-light">Stored Packages</p>
-
-        <div class="my-3">
-            <Table shadow>
-                <TableHead class="bg-primary-200">
-                  <TableHeadCell>Package ID</TableHeadCell>
-                  <TableHeadCell>Arrival Date</TableHeadCell>
-                  <TableHeadCell>Arrival Time</TableHeadCell>
-                  <TableHeadCell>Courier</TableHeadCell>
-                  <TableHeadCell>Time Stored</TableHeadCell>
-                </TableHead>
-                <TableBody class="divide-y">
-                  <TableBodyRow>
-                    <TableBodyCell>AC123TD5</TableBodyCell>
-                    <TableBodyCell>10/05/2023</TableBodyCell>
-                    <TableBodyCell>14:45:00</TableBodyCell>
-                    <TableBodyCell>John Paul</TableBodyCell>
-                    <TableBodyCell>2 days</TableBodyCell>
-                  </TableBodyRow>
-                  <TableBodyRow>
-                    <TableBodyCell>1BAH53GD</TableBodyCell>
-                    <TableBodyCell>10/05/2023</TableBodyCell>
-                    <TableBodyCell>09:34:10</TableBodyCell>
-                    <TableBodyCell>Miller Pascal</TableBodyCell>
-                    <TableBodyCell>3 days</TableBodyCell>
-                  </TableBodyRow>
-                  <TableBodyRow>
-                    <TableBodyCell>07AHDND6</TableBodyCell>
-                    <TableBodyCell>23/05/2023</TableBodyCell>
-                    <TableBodyCell>12:54:10</TableBodyCell>
-                    <TableBodyCell>Mary Lawrance</TableBodyCell>
-                    <TableBodyCell>5 hours</TableBodyCell>
-                  </TableBodyRow>
-                  <TableBodyRow>
-                    <TableBodyCell>AC156TD5</TableBodyCell>
-                    <TableBodyCell>11/05/2023</TableBodyCell>
-                    <TableBodyCell>13:25:00</TableBodyCell>
-                    <TableBodyCell>John Paul</TableBodyCell>
-                    <TableBodyCell>2 days</TableBodyCell>
-                  </TableBodyRow>
-                </TableBody>
-              </Table>
-
-              <div class="flex justify-center items-center mt-3">
-                <div>
-                  <a href="/pickupPoint/packages?filter=stored"><Icon src={ BsPlusCircle} color="#fe795d" className="w-6 h-6 mr-3" /></a>
-                </div>
-                <div>
-                  <a href="/pickupPoint/packages?filter=stored" class="text-primary-500">See all stored packages</a>
-                </div>
-              </div>
-        </div>
-    </div>
-
-    <div class="mb-16">
-        <p class="text-2xl font-light">Expected Packages</p>
-
-        <div class="my-3">
-            <Table shadow>
-                <TableHead class="bg-primary-200">
-                  <TableHeadCell>Package ID</TableHeadCell>
-                  <TableHeadCell>Arrival Date</TableHeadCell>
-                  <TableHeadCell>Arrival Time</TableHeadCell>
-                  <TableHeadCell>Courier</TableHeadCell>
-                  <TableHeadCell>Time Stored</TableHeadCell>
-                </TableHead>
-                <TableBody class="divide-y">
-                  <TableBodyRow>
-                    <TableBodyCell>AC123TD5</TableBodyCell>
-                    <TableBodyCell>10/05/2023</TableBodyCell>
-                    <TableBodyCell>14:45:00</TableBodyCell>
-                    <TableBodyCell>John Paul</TableBodyCell>
-                    <TableBodyCell>2 days</TableBodyCell>
-                  </TableBodyRow>
-                  <TableBodyRow>
-                    <TableBodyCell>1BAH53GD</TableBodyCell>
-                    <TableBodyCell>10/05/2023</TableBodyCell>
-                    <TableBodyCell>09:34:10</TableBodyCell>
-                    <TableBodyCell>Miller Pascal</TableBodyCell>
-                    <TableBodyCell>3 days</TableBodyCell>
-                  </TableBodyRow>
-                  <TableBodyRow>
-                    <TableBodyCell>07AHDND6</TableBodyCell>
-                    <TableBodyCell>23/05/2023</TableBodyCell>
-                    <TableBodyCell>12:54:10</TableBodyCell>
-                    <TableBodyCell>Mary Lawrance</TableBodyCell>
-                    <TableBodyCell>5 hours</TableBodyCell>
-                  </TableBodyRow>
-                  <TableBodyRow>
-                    <TableBodyCell>AC156TD5</TableBodyCell>
-                    <TableBodyCell>11/05/2023</TableBodyCell>
-                    <TableBodyCell>13:25:00</TableBodyCell>
-                    <TableBodyCell>John Paul</TableBodyCell>
-                    <TableBodyCell>2 days</TableBodyCell>
-                  </TableBodyRow>
-                </TableBody>
-              </Table>
-
-              <div class="flex justify-center items-center mt-3">
-                <div>
-                  <a href="/pickupPoint/packages?filter=expected"><Icon src={ BsPlusCircle} color="#fe795d" className="w-6 h-6 mr-3" /></a>
-                </div>
-                <div>
-                  <a href="/pickupPoint/packages?filter=expected" class="text-primary-500">See all expected packages</a>
-                </div>
-              </div>
-        </div>
-    </div>
-
-    <div class="mb-16">
-        <p class="text-2xl font-light">Forgotten Packages</p>
-
-        <div class="my-3">
-            <Table shadow>
-                <TableHead class="bg-primary-200">
-                  <TableHeadCell>Package ID</TableHeadCell>
-                  <TableHeadCell>Arrival Date</TableHeadCell>
-                  <TableHeadCell>Arrival Time</TableHeadCell>
-                  <TableHeadCell>Courier</TableHeadCell>
-                  <TableHeadCell>Time Stored</TableHeadCell>
-                </TableHead>
-                <TableBody class="divide-y">
-                  <TableBodyRow>
-                    <TableBodyCell>AC123TD5</TableBodyCell>
-                    <TableBodyCell>10/05/2023</TableBodyCell>
-                    <TableBodyCell>14:45:00</TableBodyCell>
-                    <TableBodyCell>John Paul</TableBodyCell>
-                    <TableBodyCell>2 days</TableBodyCell>
-                  </TableBodyRow>
-                  <TableBodyRow>
-                    <TableBodyCell>1BAH53GD</TableBodyCell>
-                    <TableBodyCell>10/05/2023</TableBodyCell>
-                    <TableBodyCell>09:34:10</TableBodyCell>
-                    <TableBodyCell>Miller Pascal</TableBodyCell>
-                    <TableBodyCell>3 days</TableBodyCell>
-                  </TableBodyRow>
-                  <TableBodyRow>
-                    <TableBodyCell>07AHDND6</TableBodyCell>
-                    <TableBodyCell>23/05/2023</TableBodyCell>
-                    <TableBodyCell>12:54:10</TableBodyCell>
-                    <TableBodyCell>Mary Lawrance</TableBodyCell>
-                    <TableBodyCell>5 hours</TableBodyCell>
-                  </TableBodyRow>
-                  <TableBodyRow>
-                    <TableBodyCell>AC156TD5</TableBodyCell>
-                    <TableBodyCell>11/05/2023</TableBodyCell>
-                    <TableBodyCell>13:25:00</TableBodyCell>
-                    <TableBodyCell>John Paul</TableBodyCell>
-                    <TableBodyCell>2 days</TableBodyCell>
-                  </TableBodyRow>
-                </TableBody>
-              </Table>
-
-              <div class="flex justify-center items-center mt-3">
-                <div>
-                  <a href="/pickupPoint/packages?filter=forgotten"><Icon src={ BsPlusCircle} color="#fe795d" className="w-6 h-6 mr-3" /></a>
-                </div>
-                <div>
-                  <a href="/pickupPoint/packages?filter=forgotten" class="text-primary-500">See all forgotten packages</a>
-                </div>
-              </div>
-        </div>
-    </div>
-
-    <div class="mb-16">
-      <p class="text-2xl font-light">Canceled Packages</p>
-
-      <div class="my-3">
-          <Table shadow>
-              <TableHead class="bg-primary-200">
-                <TableHeadCell>Package ID</TableHeadCell>
-                <TableHeadCell>Arrival Date</TableHeadCell>
-                <TableHeadCell>Arrival Time</TableHeadCell>
-                <TableHeadCell>Courier</TableHeadCell>
-                <TableHeadCell>Time Stored</TableHeadCell>
-              </TableHead>
-              <TableBody class="divide-y">
-                <TableBodyRow>
-                  <TableBodyCell>AC123TD5</TableBodyCell>
-                  <TableBodyCell>10/05/2023</TableBodyCell>
-                  <TableBodyCell>14:45:00</TableBodyCell>
-                  <TableBodyCell>John Paul</TableBodyCell>
-                  <TableBodyCell>2 days</TableBodyCell>
-                </TableBodyRow>
-                <TableBodyRow>
-                  <TableBodyCell>1BAH53GD</TableBodyCell>
-                  <TableBodyCell>10/05/2023</TableBodyCell>
-                  <TableBodyCell>09:34:10</TableBodyCell>
-                  <TableBodyCell>Miller Pascal</TableBodyCell>
-                  <TableBodyCell>3 days</TableBodyCell>
-                </TableBodyRow>
-              </TableBody>
-            </Table>
-
-            <div class="flex justify-center items-center mt-3">
-              <div>
-                <a href="/pickupPoint/packages?filter=canceled"><Icon src={ BsPlusCircle} color="#fe795d" className="w-6 h-6 mr-3" /></a>
-              </div>
-              <div>
-                <a href="/pickupPoint/packages?filter=canceled" class="text-primary-500">See all canceled packages</a>
-              </div>
-            </div>
+      <div>
+          <p class="text-4xl font-bold inline-block">{$session.name}</p>
+          <span class="font-extralight italic mx-1 text-lg">Pick-up Point</span>
+          
+          <div class="mt-4 mb-11">
+              <Button color="primary" on:click={() => registerPackageModal = true}>Register Package</Button>
+              <Button color="primary" on:click={() => registerPickUpModal = true}>Register Pick Up</Button>
+          </div>
       </div>
+
+
+      <Stats packages={filteredPackages} />
+
+
+      <div class="mb-16">
+          <p class="text-2xl font-light">Stored Packages</p>
+
+          <div class="my-3">
+              {#if filteredPackages['stored'].length === 0}
+                <p class="font-light text-center dark:text-gray-600 text-gray-400">No stored packages</p>
+              {:else}
+                <Table shadow>
+                    <TableHead class="bg-primary-200">
+                      <TableHeadCell>Package ID</TableHeadCell>
+                      <TableHeadCell>Arrival Date</TableHeadCell>
+                      <TableHeadCell>Arrival Time</TableHeadCell>
+                      <TableHeadCell>Client</TableHeadCell>
+                      <TableHeadCell>Time Stored</TableHeadCell>
+                    </TableHead>
+                    <TableBody class="divide-y">
+
+                      {#each filteredPackages['stored'] as p}
+                        <TableBodyRow>
+                          <TableBodyCell>
+                            <a href={"pickupPoint/packages/" + p.id} class="underline">{p.id}</a>
+                          </TableBodyCell>
+
+                          <TableBodyCell>
+                            {Dates.getFormattedDateTime(p.states[p.states.length - 1].orderDate).split(" ")[0]}
+                          </TableBodyCell>
+                          
+                          <TableBodyCell>
+                            {Dates.getFormattedDateTime(p.states[p.states.length - 1].orderDate).split(" ")[1]}
+                          </TableBodyCell>
+
+                          <TableBodyCell>
+                            {p.client.fname + " " + p.client.lname}
+                          </TableBodyCell>
+
+                          <TableBodyCell>
+                            {Dates.getDaysBetweenDates(new Date(p.states[p.states.length - 1].orderDate), new Date())} days
+                          </TableBodyCell>
+                        </TableBodyRow>
+                      {/each}
+
+                    </TableBody>
+                  </Table>
+
+                  <div class="flex justify-center items-center mt-3">
+                    <div>
+                      <a href="/pickupPoint/packages?filter=stored"><Icon src={ BsPlusCircle} color="#fe795d" className="w-6 h-6 mr-3" /></a>
+                    </div>
+                    <div>
+                      <a href="/pickupPoint/packages?filter=stored" class="text-primary-500">See all stored packages</a>
+                    </div>
+                  </div>
+              {/if}
+          </div>
+      </div>
+
+      <div class="mb-16">
+          <p class="text-2xl font-light">Expected Packages</p>
+
+          {#if filteredPackages['expected'].length === 0}
+            <p class="font-light text-center dark:text-gray-600 text-gray-400">No expected packages</p>
+          {:else}
+            <div class="my-3">
+                <Table shadow>
+                    <TableHead class="bg-primary-200">
+                      <TableHeadCell>Package ID</TableHeadCell>
+                      <TableHeadCell>Last Update</TableHeadCell>
+                      <TableHeadCell>Last Update Time</TableHeadCell>
+                      <TableHeadCell>Client</TableHeadCell>
+                      <TableHeadCell>Current State</TableHeadCell>
+                    </TableHead>
+                    <TableBody class="divide-y">
+
+                      {#each filteredPackages['expected'] as p}
+                        <TableBodyRow>
+                          <TableBodyCell>
+                            <a href={"pickupPoint/packages/" + p.id} class="underline">{p.id}</a>
+                          </TableBodyCell>
+
+                          <TableBodyCell>
+                            {Dates.getFormattedDateTime(p.states[p.states.length - 1].orderDate).split(" ")[0]}
+                          </TableBodyCell>
+                          
+                          <TableBodyCell>
+                            {Dates.getFormattedDateTime(p.states[p.states.length - 1].orderDate).split(" ")[1]}
+                          </TableBodyCell>
+
+                          <TableBodyCell>
+                            {p.client.fname + " " + p.client.lname}
+                          </TableBodyCell>
+
+                          <TableBodyCell>
+                            <Badge color={states[p.orderState][0]}>{states[p.orderState][1]}</Badge>
+                          </TableBodyCell>
+                        </TableBodyRow>
+                      {/each}
+
+                    </TableBody>
+                  </Table>
+
+                  <div class="flex justify-center items-center mt-3">
+                    <div>
+                      <a href="/pickupPoint/packages?filter=expected"><Icon src={ BsPlusCircle} color="#fe795d" className="w-6 h-6 mr-3" /></a>
+                    </div>
+                    <div>
+                      <a href="/pickupPoint/packages?filter=expected" class="text-primary-500">See all expected packages</a>
+                    </div>
+                  </div>
+                </div>
+          {/if}
+      </div>
+
+
+      <div class="mb-16">
+        <p class="text-2xl font-light">Canceled Packages</p>
+
+        {#if filteredPackages['cancelled'].length === 0}
+          <p class="font-light text-center dark:text-gray-600 text-gray-400">No cancelled packages</p>
+        {:else}
+
+          <div class="my-3">
+              <Table shadow>
+                  <TableHead class="bg-primary-200">
+                    <TableHeadCell>Package ID</TableHeadCell>
+                    <TableHeadCell>Last Update</TableHeadCell>
+                    <TableHeadCell>Last Update Time</TableHeadCell>
+                    <TableHeadCell>Client</TableHeadCell>
+                    <TableHeadCell>Current State</TableHeadCell>
+                  </TableHead>
+                  <TableBody class="divide-y">
+                    
+                    {#each filteredPackages['cancelled'] as p}
+                      <TableBodyRow>
+                        <TableBodyCell>
+                          <a href={"pickupPoint/packages/" + p.id} class="underline">{p.id}</a>
+                        </TableBodyCell>
+
+                        <TableBodyCell>
+                          {Dates.getFormattedDateTime(p.states[p.states.length - 1].orderDate).split(" ")[0]}
+                        </TableBodyCell>
+                        
+                        <TableBodyCell>
+                          {Dates.getFormattedDateTime(p.states[p.states.length - 1].orderDate).split(" ")[1]}
+                        </TableBodyCell>
+
+                        <TableBodyCell>
+                          {p.client.fname + " " + p.client.lname}
+                        </TableBodyCell>
+                        
+                        <TableBodyCell>
+                          <Badge color={states[p.orderState][0]}>{states[p.orderState][1]}</Badge>
+                        </TableBodyCell>
+                      </TableBodyRow>
+                    {/each}
+
+                  </TableBody>
+                </Table>
+
+                <div class="flex justify-center items-center mt-3">
+                  <div>
+                    <a href="/pickupPoint/packages?filter=canceled"><Icon src={ BsPlusCircle} color="#fe795d" className="w-6 h-6 mr-3" /></a>
+                  </div>
+                  <div>
+                    <a href="/pickupPoint/packages?filter=canceled" class="text-primary-500">See all canceled packages</a>
+                  </div>
+                </div>
+          </div>
+        {/if}
+    </div>
   </div>
-</div>
+{/if}
 
 
 <!-- REGISTER PACKAGE -->
