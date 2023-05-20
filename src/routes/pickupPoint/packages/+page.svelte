@@ -1,5 +1,8 @@
 <script>
     import { page } from '$app/stores'
+    import { onMount } from "svelte";
+    import { goto } from '$app/navigation';
+    import { session } from '$lib/session';
     import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Badge, Button, Dropdown, DropdownItem, Chevron, DropdownDivider } from 'flowbite-svelte';
     import Icon from 'svelte-icons-pack/Icon.svelte';
     import RiSystemFilterFill from "svelte-icons-pack/ri/RiSystemFilterFill";
@@ -7,6 +10,17 @@
     let filterQueryParam = $page.url.searchParams.get('filter');
     let filter = filterQueryParam ? filterQueryParam : "";
     let filterOpen = false;
+
+
+    onMount(async () => {
+    if ($session.id === undefined) {
+      goto('/login');
+      return;
+    }
+
+    //api call to get packages
+    })
+
 
     const states = {
         'OrderPlaced': ['purple', 'Order Placed'],
@@ -16,12 +30,14 @@
         'Collected': ['green', 'Collected']
     }
 
+
     const statesPickupPoint = {
         'stored': ['Delivered'],
         'canceled': ['Cancelled'],
         'expected': ['OrderPlaced', 'InTransit']
     }
 
+    
     const packages = [
         {
             id: 'AC123TD5',

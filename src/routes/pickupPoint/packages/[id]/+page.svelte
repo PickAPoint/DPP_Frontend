@@ -1,7 +1,21 @@
 <script>
     import { page } from '$app/stores';
+    import { onMount } from "svelte";
+    import { goto } from '$app/navigation';
+    import { session } from '$lib/session';
     import PackageCard from './PackageCard.svelte';
     import History from './History.svelte';
+
+
+    onMount(async () => {
+    if ($session.id === undefined) {
+      goto('/login');
+      return;
+    }
+
+    //api call to get packages
+    })
+    
 
     let packageId = $page.params.id;
 
