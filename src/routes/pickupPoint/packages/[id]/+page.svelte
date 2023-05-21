@@ -25,7 +25,6 @@
         .then(res => {
             packageDetails = res;
             loading = false;
-            console.log(packageDetails);
         })
         .catch(err => {
             console.log(err);

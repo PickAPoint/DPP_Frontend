@@ -5,30 +5,24 @@
   import { goto } from '$app/navigation';
   import { session } from '$lib/session';
   import { ApiPickupPoint } from '$lib/api/ApiPickupPoint';
-  import { Dates } from '$lib/utils/Dates';
   import Loading from "$lib/components/Loading.svelte";
-  import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Button, Modal, Input, Label, Badge } from 'flowbite-svelte';
-  import BsPlusCircle from "svelte-icons-pack/bs/BsPlusCircle";
-  import Icon from 'svelte-icons-pack/Icon.svelte';
-
+  import { Button, Modal, Input, Label, Alert, Spinner } from 'flowbite-svelte';
+  import CancelledPackages from "./CancelledPackages.svelte";
+  import StoredPackages from "./StoredPackages.svelte";
+  import ExpectedPackages from "./ExpectedPackages.svelte";
 
   let loading = true;
   let packageId = "";
+  let token = "";
   let packages = [];
-  let filteredPackages = {}
-
-  const states = {
-    'OrderPlaced': ['purple', 'Order Placed'],
-    'InTransit': ['yellow', 'In Transit'],
-    'Delivered': ['pink', 'Delivered'],
-    'Cancelled': ['red', 'Cancelled'],
-    'Collected': ['green', 'Collected']
-  }
+  let filteredPackages = {};
 
   let registerPackageModal = false;
-  let registerPackageConsentModal = false;
   let registerPickUpModal = false;
-  let registerPickUpConsentModal = false;
+  let errorRegisterPackage = false;
+  let errorRegisterPickUp = false;
+  let loadingRegisterPackage = false;
+  let loadingRegisterPickUp = false;
 
 
   onMount(async () => {
@@ -79,24 +73,62 @@
 
 
   function registerPackage() {
-    console.log('Register package: ' + packageId);
-    registerPackageModal = false;
-    packageId = "";
+    loadingRegisterPackage = true;
+
+    const payload = {
+      packageId: packageId,
+      newState: 'Delivered'
+    }
+    
+    ApiPickupPoint.updatePackageState(payload)
+      .then(res => {
+        if (res) {
+          registerPackageModal = false;
+        }
+        else {
+          errorRegisterPackage = true;
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      })
+      .finally(() => {
+        loadingRegisterPackage = false;
+      })
   }
 
 
   function registerPickUp() {
-    console.log('Register pick up: ' + packageId);
-    registerPickUpModal = false;
-    packageId = "";
+    loadingRegisterPickUp = true;
+
+    const payload = {
+      packageId: packageId,
+      newState: 'Collected',
+      token: token
+    }
+    
+    ApiPickupPoint.updatePackageState(payload)
+      .then(res => {
+        if (res) {
+          registerPickUpModal = false;
+        }
+        else {
+          errorRegisterPickUp = true;
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      })
+      .finally(() => {
+        loadingRegisterPickUp = false;
+      })
   }
 
 </script>
 
+
 {#if loading}
-
   <Loading />
-
 {:else}
 
   <div
@@ -118,117 +150,26 @@
 
 
       <div class="mb-16">
-          <p class="text-2xl font-light">Stored Packages</p>
+        <p class="text-2xl font-light">Stored Packages</p>
 
-          <div class="my-3">
-              {#if filteredPackages['stored'].length === 0}
-                <p class="font-light text-center dark:text-gray-600 text-gray-400">No stored packages</p>
-              {:else}
-                <Table shadow>
-                    <TableHead class="bg-primary-200">
-                      <TableHeadCell>Package ID</TableHeadCell>
-                      <TableHeadCell>Arrival Date</TableHeadCell>
-                      <TableHeadCell>Arrival Time</TableHeadCell>
-                      <TableHeadCell>Client</TableHeadCell>
-                      <TableHeadCell>Time Stored</TableHeadCell>
-                    </TableHead>
-                    <TableBody class="divide-y">
-
-                      {#each filteredPackages['stored'] as p}
-                        <TableBodyRow>
-                          <TableBodyCell>
-                            <a href={"pickupPoint/packages/" + p.id} class="underline">{p.id}</a>
-                          </TableBodyCell>
-
-                          <TableBodyCell>
-                            {Dates.getFormattedDateTime(p.states[p.states.length - 1].orderDate).split(" ")[0]}
-                          </TableBodyCell>
-                          
-                          <TableBodyCell>
-                            {Dates.getFormattedDateTime(p.states[p.states.length - 1].orderDate).split(" ")[1]}
-                          </TableBodyCell>
-
-                          <TableBodyCell>
-                            {p.client.fname + " " + p.client.lname}
-                          </TableBodyCell>
-
-                          <TableBodyCell>
-                            {Dates.getDaysBetweenDates(new Date(p.states[p.states.length - 1].orderDate), new Date())} days
-                          </TableBodyCell>
-                        </TableBodyRow>
-                      {/each}
-
-                    </TableBody>
-                  </Table>
-
-                  <div class="flex justify-center items-center mt-3">
-                    <div>
-                      <a href="/pickupPoint/packages?filter=stored"><Icon src={ BsPlusCircle} color="#fe795d" className="w-6 h-6 mr-3" /></a>
-                    </div>
-                    <div>
-                      <a href="/pickupPoint/packages?filter=stored" class="text-primary-500">See all stored packages</a>
-                    </div>
-                  </div>
-              {/if}
-          </div>
+        <div class="my-3">
+          {#if filteredPackages['stored'].length === 0}
+            <p class="font-light text-center dark:text-gray-600 text-gray-400">No stored packages</p>
+          {:else}
+            <StoredPackages storedPackages={filteredPackages['stored']} />
+          {/if}
+        </div>
       </div>
 
       <div class="mb-16">
-          <p class="text-2xl font-light">Expected Packages</p>
+        <p class="text-2xl font-light">Expected Packages</p>
 
-          {#if filteredPackages['expected'].length === 0}
-            <p class="font-light text-center dark:text-gray-600 text-gray-400">No expected packages</p>
-          {:else}
-            <div class="my-3">
-                <Table shadow>
-                    <TableHead class="bg-primary-200">
-                      <TableHeadCell>Package ID</TableHeadCell>
-                      <TableHeadCell>Last Update</TableHeadCell>
-                      <TableHeadCell>Last Update Time</TableHeadCell>
-                      <TableHeadCell>Client</TableHeadCell>
-                      <TableHeadCell>Current State</TableHeadCell>
-                    </TableHead>
-                    <TableBody class="divide-y">
-
-                      {#each filteredPackages['expected'] as p}
-                        <TableBodyRow>
-                          <TableBodyCell>
-                            <a href={"pickupPoint/packages/" + p.id} class="underline">{p.id}</a>
-                          </TableBodyCell>
-
-                          <TableBodyCell>
-                            {Dates.getFormattedDateTime(p.states[p.states.length - 1].orderDate).split(" ")[0]}
-                          </TableBodyCell>
-                          
-                          <TableBodyCell>
-                            {Dates.getFormattedDateTime(p.states[p.states.length - 1].orderDate).split(" ")[1]}
-                          </TableBodyCell>
-
-                          <TableBodyCell>
-                            {p.client.fname + " " + p.client.lname}
-                          </TableBodyCell>
-
-                          <TableBodyCell>
-                            <Badge color={states[p.orderState][0]}>{states[p.orderState][1]}</Badge>
-                          </TableBodyCell>
-                        </TableBodyRow>
-                      {/each}
-
-                    </TableBody>
-                  </Table>
-
-                  <div class="flex justify-center items-center mt-3">
-                    <div>
-                      <a href="/pickupPoint/packages?filter=expected"><Icon src={ BsPlusCircle} color="#fe795d" className="w-6 h-6 mr-3" /></a>
-                    </div>
-                    <div>
-                      <a href="/pickupPoint/packages?filter=expected" class="text-primary-500">See all expected packages</a>
-                    </div>
-                  </div>
-                </div>
-          {/if}
+        {#if filteredPackages['expected'].length === 0}
+          <p class="font-light text-center dark:text-gray-600 text-gray-400">No expected packages</p>
+        {:else}
+          <ExpectedPackages expectedPackages={filteredPackages['expected']} />
+        {/if}
       </div>
-
 
       <div class="mb-16">
         <p class="text-2xl font-light">Canceled Packages</p>
@@ -236,73 +177,26 @@
         {#if filteredPackages['cancelled'].length === 0}
           <p class="font-light text-center dark:text-gray-600 text-gray-400">No cancelled packages</p>
         {:else}
-
-          <div class="my-3">
-              <Table shadow>
-                  <TableHead class="bg-primary-200">
-                    <TableHeadCell>Package ID</TableHeadCell>
-                    <TableHeadCell>Last Update</TableHeadCell>
-                    <TableHeadCell>Last Update Time</TableHeadCell>
-                    <TableHeadCell>Client</TableHeadCell>
-                    <TableHeadCell>Current State</TableHeadCell>
-                  </TableHead>
-                  <TableBody class="divide-y">
-                    
-                    {#each filteredPackages['cancelled'] as p}
-                      <TableBodyRow>
-                        <TableBodyCell>
-                          <a href={"pickupPoint/packages/" + p.id} class="underline">{p.id}</a>
-                        </TableBodyCell>
-
-                        <TableBodyCell>
-                          {Dates.getFormattedDateTime(p.states[p.states.length - 1].orderDate).split(" ")[0]}
-                        </TableBodyCell>
-                        
-                        <TableBodyCell>
-                          {Dates.getFormattedDateTime(p.states[p.states.length - 1].orderDate).split(" ")[1]}
-                        </TableBodyCell>
-
-                        <TableBodyCell>
-                          {p.client.fname + " " + p.client.lname}
-                        </TableBodyCell>
-                        
-                        <TableBodyCell>
-                          <Badge color={states[p.orderState][0]}>{states[p.orderState][1]}</Badge>
-                        </TableBodyCell>
-                      </TableBodyRow>
-                    {/each}
-
-                  </TableBody>
-                </Table>
-
-                <div class="flex justify-center items-center mt-3">
-                  <div>
-                    <a href="/pickupPoint/packages?filter=canceled"><Icon src={ BsPlusCircle} color="#fe795d" className="w-6 h-6 mr-3" /></a>
-                  </div>
-                  <div>
-                    <a href="/pickupPoint/packages?filter=canceled" class="text-primary-500">See all canceled packages</a>
-                  </div>
-                </div>
-          </div>
+            <CancelledPackages cancelledPackages={filteredPackages['cancelled']} />
         {/if}
-    </div>
+      </div>
   </div>
 {/if}
 
 
-<!-- REGISTER PACKAGE -->
-
-<Modal bind:open={registerPackageModal} size="xs" autoclose={false} class="w-full">
+<Modal bind:open={registerPackageModal} size="xs" autoclose={false} class="w-full"
+>
   <form
     class="flex flex-col space-y-6"
-    on:submit|preventDefault={() => {registerPackageConsentModal = true}}
+    on:submit|preventDefault={registerPackage}
   >
     <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Register New Package</h3>
 
     <Label class="space-y-2">
       <span>Package ID</span>
       <Input 
-          type="text"
+          type="number"
+          min="1"
           name="packageId"
           placeholder="XXXXXX"
           required
@@ -310,35 +204,34 @@
       />
     </Label>
 
-    <Button type="submit" color="primary" class="w-full1">Register</Button>
+    {#if errorRegisterPackage}
+      <Alert color="red">
+          <span class="font-medium">Error!</span> Invalid Package ID.
+      </Alert>
+    {/if}
+
+    <Button type="submit" color="primary" class="w-full1">
+      {#if loadingRegisterPackage}
+        <Spinner class="mr-3" size="4" color="white" />
+      {/if}
+      Register
+    </Button>
   </form>
 </Modal>
 
-<Modal bind:open={registerPackageConsentModal} size="xs" autoclose>
-  <div class="text-center">
-      <svg aria-hidden="true" class="mx-auto mb-4 w-14 h-14 text-gray-400 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-      <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to register the package {packageId}?</h3>
-      <Button on:click={registerPackage} color="green" class="mr-2">Yes, I'm sure</Button>
-      <Button color='alternative'>No, cancel</Button>
-  </div>
-</Modal>
-
-
-
-
-<!-- REGISTER PICK UP -->
 
 <Modal bind:open={registerPickUpModal} size="xs" autoclose={false} class="w-full">
   <form
     class="flex flex-col space-y-6"
-    on:submit|preventDefault={() => {registerPickUpConsentModal = true}}
+    on:submit|preventDefault={registerPickUp}
   >
     <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Register Collected Package</h3>
 
     <Label class="space-y-2">
       <span>Package ID</span>
       <Input 
-          type="text"
+          type="number"
+          min="1"
           name="packageId"
           placeholder="XXXXXX"
           required
@@ -346,15 +239,23 @@
       />
     </Label>
 
+    <Label class="space-y-2">
+      <span>Token</span>
+      <Input 
+          type="text"
+          name="packageId"
+          placeholder="XXXXXX"
+          required
+          bind:value={token}
+      />
+    </Label>
+
+    {#if errorRegisterPickUp}
+      <Alert color="red">
+          <span class="font-medium">Error!</span> Invalid Package ID or Token.
+      </Alert>
+    {/if}
+
     <Button type="submit" color="primary" class="w-full1">Set as collected</Button>
   </form>
-</Modal>
-
-<Modal bind:open={registerPickUpConsentModal} size="xs" autoclose>
-  <div class="text-center">
-      <svg aria-hidden="true" class="mx-auto mb-4 w-14 h-14 text-gray-400 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-      <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to set package {packageId} as collected?</h3>
-      <Button on:click={registerPickUp} color="green" class="mr-2">Yes, I'm sure</Button>
-      <Button color='alternative'>No, cancel</Button>
-  </div>
 </Modal>

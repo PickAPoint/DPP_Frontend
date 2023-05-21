@@ -93,7 +93,7 @@
 
 
     <!-- Chart -->
-    <div class="relative">
+    <div class="relative pt-4">
         <Doughnut {data} options={options} class="mx-auto" />
     </div>
 
