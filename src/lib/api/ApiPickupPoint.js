@@ -17,4 +17,11 @@ export const ApiPickupPoint = {
         return response.data
     },
 
+    updatePackageState: async function(payload) {
+        const url = `${API_URL}/partner/package`;
+
+        const response = await axios.put(url, payload);
+        return response.data
+    },
+
 }

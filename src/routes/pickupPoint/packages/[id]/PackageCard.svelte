@@ -5,6 +5,7 @@
     import AiOutlineShoppingCart from "svelte-icons-pack/ai/AiOutlineShoppingCart";
     import BiCalendar from "svelte-icons-pack/bi/BiCalendar";
     import AiOutlineInfoCircle from "svelte-icons-pack/ai/AiOutlineInfoCircle";
+    import AiOutlinePhone from "svelte-icons-pack/ai/AiOutlinePhone";
     import AiOutlineUser from "svelte-icons-pack/ai/AiOutlineUser";
     import AiOutlineMail from "svelte-icons-pack/ai/AiOutlineMail";
     import Icon from 'svelte-icons-pack/Icon.svelte';
@@ -36,7 +37,7 @@
             <div class="items-center flex mt-3">
                 <Icon src={AiOutlineShoppingCart} color="#fe795d" className="w-6 h-6 mr-3" />
                 <span class="text-lg font-semibold tracking-tight text-gray-900 dark:text-white mr-2">eStore</span>
-                <span class="font-light text-gray-700 dark:text-gray-400 leading-tight">{packageDetails.eStore}</span>
+                <span class="font-light text-gray-700 dark:text-gray-400 leading-tight">{packageDetails.estore}</span>
             </div>
 
             <div class="items-center flex mt-3">
@@ -74,6 +75,12 @@
                 <Icon src={AiOutlineMail} color="#fe795d" className="w-6 h-6 mr-3" />
                 <span class="text-lg font-semibold tracking-tight text-gray-900 dark:text-white mr-2">Email</span>
                 <span class="font-light text-gray-700 dark:text-gray-400 leading-tight">{packageDetails.client.email}</span>
+            </div>
+
+            <div class="items-center flex mt-3">
+                <Icon src={AiOutlinePhone} color="#fe795d" className="w-6 h-6 mr-3" />
+                <span class="text-lg font-semibold tracking-tight text-gray-900 dark:text-white mr-2">Phone Number</span>
+                <span class="font-light text-gray-700 dark:text-gray-400 leading-tight">{packageDetails.client.contact}</span>
             </div>
         </div>
 

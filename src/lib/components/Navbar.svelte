@@ -49,7 +49,6 @@
       {:else if $session.type === 'Partner'}
         <NavLi class="hover:text-primary-700 md:hover:text-primary-700 lg:hover:text-primary-700" href="/pickupPoint">Dashboard</NavLi>
         <NavLi class="hover:text-primary-700 md:hover:text-primary-700 lg:hover:text-primary-700" href="/pickupPoint/packages">Packages</NavLi>
-        <NavLi class="hover:text-primary-700 md:hover:text-primary-700 lg:hover:text-primary-700" href="/pickupPoint/operations">Operations</NavLi>
       {/if}
 
     {/if}
