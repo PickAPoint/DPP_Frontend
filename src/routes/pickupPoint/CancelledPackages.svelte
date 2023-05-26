@@ -55,12 +55,7 @@
       </TableBody>
     </Table>
 
-    <div class="flex justify-center items-center mt-3">
-      <div>
-        <a href="/pickupPoint/packages?filter=canceled"><Icon src={ BsPlusCircle} color="#fe795d" className="w-6 h-6 mr-3" /></a>
-      </div>
-      <div>
-        <a href="/pickupPoint/packages?filter=canceled" class="text-primary-500">See all canceled packages</a>
-      </div>
+    <div class="text-right mt-1">
+        <a href="/pickupPoint/packages?filter=canceled" class="text-sm text-primary-500">See all canceled packages</a>
     </div>
 </div>

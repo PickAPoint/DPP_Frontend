@@ -145,47 +145,34 @@
           </div>
       </div>
 
-
       <Stats packages={filteredPackages} />
 
-
-      <div class="mb-16">
-        <p class="text-2xl font-light">Stored Packages</p>
-
-        <div class="my-3">
-          {#if filteredPackages['stored'].length === 0}
-            <p class="font-light text-center dark:text-gray-600 text-gray-400">No stored packages</p>
-          {:else}
-            <StoredPackages storedPackages={filteredPackages['stored']} />
-          {/if}
+      {#if filteredPackages['stored'].length > 0}
+        <div class="mb-16">
+          <p class="text-2xl font-light">Stored Packages</p>
+          <StoredPackages storedPackages={filteredPackages['stored']} />
         </div>
-      </div>
+      {/if}
 
-      <div class="mb-16">
-        <p class="text-2xl font-light">Expected Packages</p>
 
-        {#if filteredPackages['expected'].length === 0}
-          <p class="font-light text-center dark:text-gray-600 text-gray-400">No expected packages</p>
-        {:else}
+      {#if filteredPackages['expected'].length > 0}
+        <div class="mb-16">
+          <p class="text-2xl font-light">Expected Packages</p>
           <ExpectedPackages expectedPackages={filteredPackages['expected']} />
-        {/if}
-      </div>
+        </div>
+      {/if}
 
-      <div class="mb-16">
-        <p class="text-2xl font-light">Canceled Packages</p>
-
-        {#if filteredPackages['cancelled'].length === 0}
-          <p class="font-light text-center dark:text-gray-600 text-gray-400">No cancelled packages</p>
-        {:else}
-            <CancelledPackages cancelledPackages={filteredPackages['cancelled']} />
-        {/if}
-      </div>
+      {#if filteredPackages['cancelled'].length > 0}
+        <div class="mb-16">
+          <p class="text-2xl font-light">Canceled Packages</p>
+          <CancelledPackages cancelledPackages={filteredPackages['cancelled']} />
+        </div>
+      {/if}
   </div>
 {/if}
 
 
-<Modal bind:open={registerPackageModal} size="xs" autoclose={false} class="w-full"
->
+<Modal bind:open={registerPackageModal} size="xs" autoclose={false} class="w-full">
   <form
     class="flex flex-col space-y-6"
     on:submit|preventDefault={registerPackage}
@@ -198,7 +185,7 @@
           type="number"
           min="1"
           name="packageId"
-          placeholder="XXXXXX"
+          placeholder="Enter Package ID"
           required
           bind:value={packageId}
       />
@@ -233,7 +220,7 @@
           type="number"
           min="1"
           name="packageId"
-          placeholder="XXXXXX"
+          placeholder="Enter Package ID"
           required
           bind:value={packageId}
       />
@@ -244,7 +231,7 @@
       <Input 
           type="text"
           name="packageId"
-          placeholder="XXXXXX"
+          placeholder="Enter token received via SMS"
           required
           bind:value={token}
       />

@@ -84,7 +84,7 @@
                     <DropdownDivider/>
                     <DropdownItem on:click={() => {handleFilter('stored')}}>Stored</DropdownItem>
                     <DropdownItem on:click={() => {handleFilter('expected')}}>Expected</DropdownItem>
-                    <DropdownItem on:click={() => {handleFilter('canceled')}}>Canceled</DropdownItem>
+                    <DropdownItem on:click={() => {handleFilter('cancelled')}}>Cancelled</DropdownItem>
                     <DropdownItem on:click={() => {handleFilter('collected')}}>Collected</DropdownItem>
                 </Dropdown>
             </div>

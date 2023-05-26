@@ -45,12 +45,7 @@
         </TableBody>
     </Table>
     
-    <div class="flex justify-center items-center mt-3">
-        <div>
-            <a href="/pickupPoint/packages?filter=stored"><Icon src={ BsPlusCircle} color="#fe795d" className="w-6 h-6 mr-3" /></a>
-        </div>
-        <div>
-            <a href="/pickupPoint/packages?filter=stored" class="text-primary-500">See all stored packages</a>
-        </div>
+    <div class="text-right mt-1">
+            <a href="/pickupPoint/packages?filter=stored" class="text-right text-primary-500">See all stored packages</a>
     </div>
 </div>

@@ -61,6 +61,11 @@
         return lastDate + ' - ' + lastTime;
     }
 
+
+    function noPackages() {
+        return packages.stored.length == 0 && packages.expected.length == 0 && packages.cancelled.length == 0 && packages.collected.length == 0;
+    }
+
 </script>
 
 
@@ -93,8 +98,14 @@
 
 
     <!-- Chart -->
-    <div class="relative pt-4">
-        <Doughnut {data} options={options} class="mx-auto" />
-    </div>
 
+    {#if noPackages()}
+        <div class="m-auto">
+            <p class="text-center text-gray-500 dark:text-gray-400">No packages to show</p>
+        </div>
+    {:else}
+        <div class="relative pt-4">
+            <Doughnut {data} options={options} class="mx-auto" />
+        </div>
+    {/if}
 </div>

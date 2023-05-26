@@ -55,12 +55,7 @@
       </TableBody>
     </Table>
 
-    <div class="flex justify-center items-center mt-3">
-      <div>
-        <a href="/pickupPoint/packages?filter=expected"><Icon src={ BsPlusCircle} color="#fe795d" className="w-6 h-6 mr-3" /></a>
-      </div>
-      <div>
-        <a href="/pickupPoint/packages?filter=expected" class="text-primary-500">See all expected packages</a>
-      </div>
+    <div class="text-right mt-1">
+        <a href="/pickupPoint/packages?filter=expected" class="text-primary-500 text-sm">See all expected packages</a>
     </div>
 </div>
