@@ -1,20 +1,21 @@
 <script>
+    import { Dates } from '$lib/utils/Dates';
     import { Card, Badge } from "flowbite-svelte";
     import VscPackage from "svelte-icons-pack/vsc/VscPackage";
     import AiOutlineShoppingCart from "svelte-icons-pack/ai/AiOutlineShoppingCart";
     import BiCalendar from "svelte-icons-pack/bi/BiCalendar";
     import AiOutlineInfoCircle from "svelte-icons-pack/ai/AiOutlineInfoCircle";
+    import AiOutlinePhone from "svelte-icons-pack/ai/AiOutlinePhone";
     import AiOutlineUser from "svelte-icons-pack/ai/AiOutlineUser";
     import AiOutlineMail from "svelte-icons-pack/ai/AiOutlineMail";
     import Icon from 'svelte-icons-pack/Icon.svelte';
 
     const states = {
-        'order_placed': ['purple', 'Order Placed'],
-        'processing': ['blue', 'Processing'],
-        'in_transit': ['yellow', 'In Transit'],
-        'delivered': ['pink', 'Delivered'],
-        'cancelled': ['red', 'Cancelled'],
-        'collected': ['green', 'Collected']
+        'OrderPlaced': ['purple', 'Order Placed'],
+        'InTransit': ['yellow', 'In Transit'],
+        'Delivered': ['pink', 'Delivered'],
+        'Cancelled': ['red', 'Cancelled'],
+        'Collected': ['green', 'Collected']
     }
 
     export let packageDetails;
@@ -36,13 +37,15 @@
             <div class="items-center flex mt-3">
                 <Icon src={AiOutlineShoppingCart} color="#fe795d" className="w-6 h-6 mr-3" />
                 <span class="text-lg font-semibold tracking-tight text-gray-900 dark:text-white mr-2">eStore</span>
-                <span class="font-light text-gray-700 dark:text-gray-400 leading-tight">{packageDetails.eStore}</span>
+                <span class="font-light text-gray-700 dark:text-gray-400 leading-tight">{packageDetails.estore}</span>
             </div>
 
             <div class="items-center flex mt-3">
                 <Icon src={BiCalendar} color="#fe795d" className="w-6 h-6 mr-3" />
                 <span class="text-lg font-semibold tracking-tight text-gray-900 dark:text-white mr-2">Order Date</span>
-                <span class="font-light text-gray-700 dark:text-gray-400 leading-tight">{packageDetails.orderDate}</span>
+                <span class="font-light text-gray-700 dark:text-gray-400 leading-tight">
+                    {Dates.getFormattedDateTime(packageDetails.orderDate)}
+                </span>
             </div>
 
             <div class="items-center flex mt-3">
@@ -72,6 +75,12 @@
                 <Icon src={AiOutlineMail} color="#fe795d" className="w-6 h-6 mr-3" />
                 <span class="text-lg font-semibold tracking-tight text-gray-900 dark:text-white mr-2">Email</span>
                 <span class="font-light text-gray-700 dark:text-gray-400 leading-tight">{packageDetails.client.email}</span>
+            </div>
+
+            <div class="items-center flex mt-3">
+                <Icon src={AiOutlinePhone} color="#fe795d" className="w-6 h-6 mr-3" />
+                <span class="text-lg font-semibold tracking-tight text-gray-900 dark:text-white mr-2">Phone Number</span>
+                <span class="font-light text-gray-700 dark:text-gray-400 leading-tight">{packageDetails.client.contact}</span>
             </div>
         </div>
 

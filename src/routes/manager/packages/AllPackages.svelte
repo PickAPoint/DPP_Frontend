@@ -4,128 +4,79 @@
     import Icon from 'svelte-icons-pack/Icon.svelte';
     import RiSystemFilterFill from "svelte-icons-pack/ri/RiSystemFilterFill";
     import RiSystemArrowDropDownLine from "svelte-icons-pack/ri/RiSystemArrowDropDownLine";
+    import { ApiAdmin } from '$lib/api/ApiAdmin.js';
+    import { Dates } from '$lib/utils/Dates';
 
     let filterQueryParam = $page.url.searchParams.get('filter');
     let filter = filterQueryParam ? filterQueryParam : "";
     let filterOpen = false;
 
     const states = {
-        'order_placed': ['purple', 'Order Placed'],
-        'processing': ['blue', 'Processing'],
-        'in_transit': ['yellow', 'In Transit'],
-        'delivered': ['pink', 'Delivered'],
-        'cancelled': ['red', 'Cancelled'],
-        'collected': ['green', 'Collected']
+      'OrderPlaced': ['purple', 'Order Placed'],
+      'InTransit': ['yellow', 'In Transit'],
+      'Delivered': ['pink', 'Delivered'],
+      'Cancelled': ['red', 'Cancelled'],
+      'Collected': ['green', 'Collected']
     }
 
     const statesPickupPoint = {
-        'stored': ['delivered'],
-        'canceled': ['cancelled'],
-        'expected': ['order_placed', 'processing', 'in_transit'],
+        'stored': ['Delivered'],
+        'canceled': ['Cancelled'],
+        'expected': ['OrderPlaced', 'InTransit'],
+        'completed': ['Collected'],
     }
 
-    const packages = [
-        {
-            id: 'AC123TD5',
-            clientName: 'John',
-            clientSurname: 'Paul',
-            lastUpdate: '10/05/2023 14:45:00',
-            status: 'order_placed'
-        },
-        {
-            id: 'AC1SDFD5',
-            clientName: 'Mary',
-            clientSurname: 'Popins',
-            lastUpdate: '10/05/2023 23:45:00',
-            status: 'in_transit'
-        },
-        {
-            id: '121SDFD5',
-            clientName: 'Michael',
-            clientSurname: 'Jackson',
-            lastUpdate: '10/05/2023 12:03:33',
-            status: 'processing'
-        },
-        {
-            id: '12123FD5',
-            clientName: 'Michael',
-            clientSurname: 'Jackson',
-            lastUpdate: '10/05/2023 12:03:33',
-            status: 'collected'
-        },
-        {
-            id: 'A4309TD5',
-            clientName: 'Ed',
-            clientSurname: 'Sheeran',
-            lastUpdate: '10/05/2023 14:45:00',
-            status: 'cancelled'
-        },
-        {
-            id: '76GSDFD5',
-            clientName: 'Mary',
-            clientSurname: 'Lawrance',
-            lastUpdate: '12/09/2023 23:45:00',
-            status: 'delivered'
-        },
-        {
-            id: 'AC343TD5',
-            clientName: 'Trevis',
-            clientSurname: 'Scott',
-            lastUpdate: '10/05/2023 14:45:00',
-            status: 'collected'
-        },
-        {
-            id: 'AC1S09D5',
-            clientName: 'Beyonce',
-            clientSurname: 'Mills',
-            lastUpdate: '10/05/2023 23:45:00',
-            status: 'in_transit'
-        },
-        {
-            id: 'A4343TD5',
-            clientName: 'Trevis',
-            clientSurname: 'Scott',
-            lastUpdate: '10/05/2023 14:45:00',
-            status: 'cancelled'
-        },
-        {
-            id: '121SDJD5',
-            clientName: 'Bruno',
-            clientSurname: 'Mars',
-            lastUpdate: '10/05/2023 12:03:33',
-            status: 'processing'
-        },
-        {
-            id: '76GS26D5',
-            clientName: 'Will',
-            clientSurname: 'Smith',
-            lastUpdate: '12/09/2023 23:45:00',
-            status: 'collected'
-        }
+    export let packages = [];
 
-    ]
+    
+    // Change current filter and close dropdown
+    function handleFilter(f) {
+        filter = f;
+        filterOpen = false;
+    }
 
+    // Create a status dropdown for each package
     const filterOf = packages.map((item) => {
         return {
             [item.id]: false
         }
     })
 
-    function handleFilter(f) {
-        filter = f;
-        filterOpen = false;
+    // Hangle change status of a package
+    function handleChangeStatus(item, status) {
+        if (item.orderState == status) {
+            console.log("Package already in this status");
+            filterOf[item.id] = false;
+            return;
+        }
+
+        ApiAdmin.adminUpdatePackage(item, status)
+            .then(data => {
+                if (data === false) {
+                    alert("Error updating package status")
+                    filterOf[item.id] = false;
+                    return;
+                }
+                // Update item status in packages array
+                packages = packages.map((p) => {
+                    if (p.id == item.id) {
+                        p.orderState = status;
+                    }
+                    return p;
+                })
+            })
+            .catch(err => {
+                console.log("Error", err);
+            })
+
+        filterOf[item.id] = false;
     }
 
-    function handleChangeStatus(id, status) {
-        console.log("Changing status of package: ", id, "to", status);
-        filterOf[id] = false;
-    }
-
-
+    // Filter items by search term, id in this case
     let searchTerm = '';
     $: filteredItems = packages.filter(
-        (item) => item.id.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1
-    );
+        (item) => item.client.id.toString().toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1
+        );
 
 
 </script>
@@ -148,9 +99,9 @@
                     <DropdownItem on:click={() => {handleFilter('')}}>All</DropdownItem>
                     <DropdownDivider/>
                     <DropdownItem on:click={() => {handleFilter('stored')}}>Stored</DropdownItem>
-                    <DropdownItem on:click={() => {handleFilter('expected')}}>Expected</DropdownItem>
-                    <DropdownItem on:click={() => {handleFilter('forgotten')}}>Forgotten</DropdownItem>
                     <DropdownItem on:click={() => {handleFilter('canceled')}}>Canceled</DropdownItem>
+                    <DropdownItem on:click={() => {handleFilter('expected')}}>Expected</DropdownItem>
+                    <DropdownItem on:click={() => {handleFilter('completed')}}>Completed</DropdownItem>
                 </Dropdown>
             </div>
             <div>
@@ -161,9 +112,9 @@
                     <TableHeadCell class="font-bold">Last Update</TableHeadCell>
                     <TableHeadCell class="font-bold">Package Status</TableHeadCell>
                     </TableHead>
-                    <TableBody class="divide-y">
+                    <TableBody>
                     {#each filteredItems as item}
-                        {#if filter == "" || statesPickupPoint[filter].includes(item.status) }
+                        {#if filter == "" || statesPickupPoint[filter].includes(item.orderState) }
                             <TableBodyRow>
                                 <TableBodyCell>
                                     <div class="truncate">
@@ -174,27 +125,25 @@
                                 </TableBodyCell>
                                 <TableBodyCell>
                                     <div class="truncate">
-                                        {item.clientName + " " + item.clientSurname}
+                                        {item.client.fname + " " + item.client.lname}
                                     </div>
                                 </TableBodyCell>
                                 <TableBodyCell>
                                     <div class="truncate">
-                                        {item.lastUpdate}
+                                        {Dates.getFormattedDateTime(item.states[item.states.length - 1].orderDate)}
                                     </div>
                                 </TableBodyCell>
                                 <TableBodyCell>
-                                    <Badge color={states[item.status][0]}>{states[item.status][1]}<Icon src={RiSystemArrowDropDownLine} color="#fff1ee" className="ml-2" /> </Badge>
+                                    <Badge color={states[item.orderState][0]}>{states[item.orderState][1]}<Icon src={RiSystemArrowDropDownLine} color="#fff1ee" className="ml-2" /> </Badge>
                                     <Dropdown bind:open={filterOf[item.id]}>
-                                        <DropdownItem on:click={() => {handleChangeStatus(item.id, '')}}>All</DropdownItem>
-                                        <DropdownDivider/>
-                                        <DropdownItem on:click={() => {handleChangeStatus(item.id, 'stored')}}>Stored</DropdownItem>
-                                        <DropdownItem on:click={() => {handleChangeStatus(item.id, 'expected')}}>Expected</DropdownItem>
-                                        <DropdownItem on:click={() => {handleChangeStatus(item.id, 'forgotten')}}>Forgotten</DropdownItem>
-                                        <DropdownItem on:click={() => {handleChangeStatus(item.id, 'canceled')}}>Canceled</DropdownItem>
+                                        <DropdownItem on:click={() => {handleChangeStatus(item, 'OrderPlaced')}}>Order Placed</DropdownItem>
+                                        <DropdownItem on:click={() => {handleChangeStatus(item, 'InTransit')}}>In Transit</DropdownItem>
+                                        <DropdownItem on:click={() => {handleChangeStatus(item, 'Delivered')}}>Delivered</DropdownItem>
+                                        <DropdownItem on:click={() => {handleChangeStatus(item, 'Cancelled')}}>Cancelled</DropdownItem>
+                                        <DropdownItem on:click={() => {handleChangeStatus(item, 'Collected')}}>Collected</DropdownItem>
                                     </Dropdown>
 
-
-
+                                    
                                 </TableBodyCell>
                             </TableBodyRow>
                         {/if}

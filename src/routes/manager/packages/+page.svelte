@@ -1,8 +1,17 @@
 <script>
 
     import AllPackages from "./AllPackages.svelte";
+    import { ApiAdmin } from '$lib/api/ApiAdmin.js';
 
-    
+    let packages = [];
+
+    ApiAdmin.adminPackages()
+        .then(data => {
+            packages = data;
+        })
+        .catch(err => {
+            console.log("Error", err);
+        })
 
 </script>
 
@@ -17,7 +26,7 @@
 
 
     <div class="w-full">
-        <AllPackages />
+        <AllPackages bind:packages={packages}/>
     </div>
 
 
