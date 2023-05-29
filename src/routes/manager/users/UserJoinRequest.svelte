@@ -1,6 +1,6 @@
 <script>
-  import { Popover, Card, Label, Input, Checkbox, MenuButton, Dropdown, DropdownItem, Avatar, Button } from "flowbite-svelte";
-  import { blur, fade, slide } from 'svelte/transition';
+  import { Popover, Card, Label, Avatar, Button } from "flowbite-svelte";
+  import { fade } from 'svelte/transition';
   import { ApiAdmin } from '$lib/api/ApiAdmin';
 
   export let users = [];

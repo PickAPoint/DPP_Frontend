@@ -4,7 +4,6 @@
     import { goto } from '$app/navigation';
     import { fly } from 'svelte/transition';
     import { session } from '$lib/session';
-    import { ApiPickupPoint } from '$lib/api/ApiPickupPoint';
     import { ApiAdmin } from '$lib/api/ApiAdmin';
     import Loading from "$lib/components/Loading.svelte";
     import PackageCard from './PackageCard.svelte';
@@ -16,6 +15,11 @@
 
 
     onMount(async () => {
+
+        if ($session.id === undefined || $session.type != "Admin") {
+            goto('/login');
+            return;
+        }
         
         //api call to get packages
         ApiAdmin.adminPackage(packageId)

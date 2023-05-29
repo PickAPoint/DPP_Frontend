@@ -1,9 +1,7 @@
 <script>
-  import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, TableSearch, Button } from 'flowbite-svelte';
+  import { TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, TableSearch } from 'flowbite-svelte';
   import { ApiAdmin } from '$lib/api/ApiAdmin';
   
-  import Icon from 'svelte-icons-pack/Icon.svelte';
-  // import FaSolidTrashAlt from "svelte-icons-pack/fa/FaSolidTrash";
   import FaTrashAlt from 'svelte-icons/fa/FaTrashAlt.svelte'
 
 

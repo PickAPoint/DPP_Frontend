@@ -26,7 +26,7 @@
 
 
   onMount(async () => {
-    if ($session.id === undefined) {
+    if ($session.id === undefined || $session.type != "Partner") {
       goto('/login');
       return;
     }

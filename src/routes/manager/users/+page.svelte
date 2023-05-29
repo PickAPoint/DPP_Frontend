@@ -1,10 +1,10 @@
 <script>
-    import { Button, Table, TableBody, TableHead, TableBodyRow, TableBodyCell, TableHeadCell } from 'flowbite-svelte';
     import { onMount } from "svelte";
     import AllUsers from './AllUsers.svelte';
     import UserJoinRequest from './UserJoinRequest.svelte';
-    import RefusedUsers from './RefusedUsers.svelte';
     import { ApiAdmin } from '$lib/api/ApiAdmin';
+    import { session } from '$lib/session';
+    import { goto } from '$app/navigation';
     
     import "@carbon/styles/css/styles.css";
     import "@carbon/charts/styles.css";
@@ -13,6 +13,11 @@
     let request_users = [];
 
     onMount(async () => {
+
+        if ($session.id === undefined || $session.type != "Admin") {
+            goto('/login');
+            return;
+        }
         
         //api call to get Users
         ApiAdmin.adminUsers()

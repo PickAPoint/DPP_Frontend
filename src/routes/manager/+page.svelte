@@ -1,32 +1,40 @@
 <script>
-    import { Button, Table, TableBody, TableHead, TableBodyRow, TableBodyCell, TableHeadCell } from 'flowbite-svelte';
     import UsersList from './UsersList.svelte';
     import PackagesManagment from './PackagesManagment.svelte';
     import { ApiAdmin } from '$lib/api/ApiAdmin.js';
+    import { session } from '$lib/session';
+    import { onMount } from "svelte";
+    import { goto } from '$app/navigation';
     
     import "@carbon/styles/css/styles.css";
     import "@carbon/charts/styles.css";
 
-    import UserStats from './UserStats.svelte';
-
     // O admin vem de trás através do login
 
+    onMount(async () => {
+        if ($session.id === undefined || $session.type != "Admin") {
+        goto('/login');
+        return;
+        }
+
+        ApiAdmin.adminDashboard()
+            .then(data => {
+                users = data.data1.filter(user => user.type == "Partner");
+                packages = data.data2;
+            })
+            .catch(err => {
+                console.log("Error", err);
+            })
+    })
+
     let admin = {
-        name: "Bill Gates",
-        email: "admin@ua.pt",
+        name: $session.name,
     }
 
     let users = [];
     let packages = [];
 
-    ApiAdmin.adminDashboard()
-        .then(data => {
-            users = data.data1.filter(user => user.type == "Partner");
-            packages = data.data2;
-        })
-        .catch(err => {
-            console.log("Error", err);
-        })
+    
     
 </script>
 

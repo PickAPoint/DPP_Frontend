@@ -1,5 +1,5 @@
 <script>
-    import { Card, Listgroup, Avatar, Badge, Table, TableHead, TableHeadCell, TableBody, TableBodyCell, TableBodyRow } from "flowbite-svelte";
+    import { Badge, Table, TableHead, TableHeadCell, TableBody, TableBodyCell, TableBodyRow } from "flowbite-svelte";
     import { Dates } from '$lib/utils/Dates';
 
     export let packages= [];
