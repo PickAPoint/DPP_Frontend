@@ -45,7 +45,9 @@
     {#if $session.id}
       
       {#if $session.type === 'Admin'}
-        <NavLi href="/manager">TODO</NavLi>
+        <NavLi class="hover:text-primary-700 md:hover:text-primary-700 lg:hover:text-primary-700" href="/manager">Dashboard</NavLi>
+        <NavLi class="hover:text-primary-700 md:hover:text-primary-700 lg:hover:text-primary-700" href="/manager/users">PickUps</NavLi>
+        <NavLi class="hover:text-primary-700 md:hover:text-primary-700 lg:hover:text-primary-700" href="/manager/packages">Packages</NavLi>
       {:else if $session.type === 'Partner'}
         <NavLi class="hover:text-primary-700 md:hover:text-primary-700 lg:hover:text-primary-700" href="/pickupPoint">Dashboard</NavLi>
         <NavLi class="hover:text-primary-700 md:hover:text-primary-700 lg:hover:text-primary-700" href="/pickupPoint/packages">Packages</NavLi>

@@ -2,9 +2,6 @@
     import { Card, MenuButton, Dropdown, DropdownItem, Avatar, Button } from "flowbite-svelte";
 
 
-
-    
-
 </script>
 
 <Card padding='sm'>

@@ -1,7 +1,16 @@
 <script>
-    import { Card, Listgroup, Avatar, Table, TableHead, TableHeadCell, TableBody, TableBodyCell, TableBodyRow } from "flowbite-svelte";
+    import { Badge, Table, TableHead, TableHeadCell, TableBody, TableBodyCell, TableBodyRow } from "flowbite-svelte";
+    import { Dates } from '$lib/utils/Dates';
 
     export let packages= [];
+
+    const states = {
+      'OrderPlaced': ['purple', 'Order Placed'],
+      'InTransit': ['yellow', 'In Transit'],
+      'Delivered': ['pink', 'Delivered'],
+      'Cancelled': ['red', 'Cancelled'],
+      'Collected': ['green', 'Collected']
+    }
 
     function getMultipleRandom(arr, num) {
         const shuffled = [...arr].sort(() => 0.5 - Math.random());
@@ -14,7 +23,7 @@
 
 <div class="mb-16">
     <a href="/manager/packages" class="text-sm font-medium text-primary-900 hover:underline">
-    <p class="text-2xl font-light">Pick Up Points Packages</p>
+    <p class="text-2xl font-light">Packages</p>
     </a>
 
     <div class="my-3 w-full">
@@ -24,41 +33,35 @@
           </div>
       {:else}
       <Table shadow>
-        <TableHead>
+        <TableHead class="bg-primary-200">
           <TableHeadCell>Package ID</TableHeadCell>
-          <TableHeadCell>Arrival Date</TableHeadCell>
-          <TableHeadCell>Arrival Time</TableHeadCell>
-          <TableHeadCell>Courier</TableHeadCell>
-          <TableHeadCell>Time Stored</TableHeadCell>
+          <TableHeadCell>Last Update</TableHeadCell>
+          <TableHeadCell>Last Update Time</TableHeadCell>
+          <TableHeadCell>Client</TableHeadCell>
+          <TableHeadCell>Current State</TableHeadCell>
         </TableHead>
           <TableBody class="divide-y">
             {#each getMultipleRandom(packages, 5) as pack}
               <TableBodyRow>
                 <TableBodyCell>
-                  <div class="w-[10vh] truncate">
-                    {pack.id}
-                  </div>
+                  <a href={"manager/packages/" + pack.id} class="underline">{pack.id}</a>
                 </TableBodyCell>
+    
                 <TableBodyCell>
-                  <div class="w-[15vh] truncate">
-                    {pack.arrival_date}
-                  </div>
+                  {Dates.getFormattedDateTime(pack.states[pack.states.length - 1].orderDate).split(" ")[0]}
                 </TableBodyCell>
+                
                 <TableBodyCell>
-                  <div class="w-[15vh] truncate">
-                    {pack.arrival_time}
-                  </div>
+                  {Dates.getFormattedDateTime(pack.states[pack.states.length - 1].orderDate).split(" ")[1]}
                 </TableBodyCell>
+    
                 <TableBodyCell>
-                  <div class="w-[30vh] truncate">
-                    {pack.courier}
-                  </div>
-                  </TableBodyCell>
+                  {pack.client.fname + " " + pack.client.lname}
+                </TableBodyCell>
+                
                 <TableBodyCell>
-                  <div class="w-[10vh] truncate">
-                    {pack.time_stored} days
-                  </div>
-                  </TableBodyCell>
+                  <Badge color={states[pack.orderState][0]}>{states[pack.orderState][1]}</Badge>
+                </TableBodyCell>
               </TableBodyRow>
             {/each}
             </TableBody>

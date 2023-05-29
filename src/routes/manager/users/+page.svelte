@@ -1,13 +1,45 @@
 <script>
-    import { Button, Table, TableBody, TableHead, TableBodyRow, TableBodyCell, TableHeadCell } from 'flowbite-svelte';
+    import { onMount } from "svelte";
     import AllUsers from './AllUsers.svelte';
     import UserJoinRequest from './UserJoinRequest.svelte';
-    import RefusedUsers from './RefusedUsers.svelte';
+    import { ApiAdmin } from '$lib/api/ApiAdmin';
+    import { session } from '$lib/session';
+    import { goto } from '$app/navigation';
     
     import "@carbon/styles/css/styles.css";
     import "@carbon/charts/styles.css";
 
+    let current_users = [];
+    let request_users = [];
 
+    onMount(async () => {
+
+        if ($session.id === undefined || $session.type != "Admin") {
+            goto('/login');
+            return;
+        }
+        
+        //api call to get Users
+        ApiAdmin.adminUsers()
+        .then(data => {
+            // current_users is all users that are not pending
+            current_users = data.filter(
+                user => user.type == "Partner"
+            );
+            
+            request_users = data.filter(
+                user => user.type == "Pending"
+            );
+
+
+            
+        })
+        .catch(err => {
+            console.log(err);
+        })
+
+    })
+    
     
 </script>
 
@@ -20,7 +52,7 @@
     <div class="h-8"></div>
 
     <div>
-        <AllUsers />
+        <AllUsers bind:items={current_users}/>
     </div>
     <div class="h-14"></div>
 
@@ -29,19 +61,10 @@
     </div>
     <div class="h-8"></div>
 
-    <div class="h-[66vh] overflow-y-auto">
-        <UserJoinRequest />
+    <div>
+        <UserJoinRequest bind:users={request_users} bind:items={current_users}/>
     </div>
     <div class="h-14"></div>
-
-    <div>
-        <div>
-            <p class="text-2xl font-bold inline-block">Refused Pick Up Points Requests</p>
-        </div>
-        <div class="pt-5 h-[50vh] overflow-y-auto">
-            <RefusedUsers />
-        </div>
-    </div>
 
 </div>
 
