@@ -17,4 +17,11 @@ jobs:
       
         - name: Deploy to Google Cloud VM
           run: gcloud compute ssh rafafergon@instance-1 --zone=europe-southwest1-a --command="cd /home/rafafergon/DPP_Frontend; git pull; sudo fuser -k 5173/tcp; /home/rafafergon/.nvm/versions/node/v18.16.0/bin/npm i; /home/rafafergon/.nvm/versions/node/v18.16.0/bin/npm run build; (/home/rafafergon/.nvm/versions/node/v18.16.0/bin/npm run preview -- --port 5173 --host > /dev/null 2>&1 &)"
+        
+        - name: PING - Dispatch initiating repository event
+          run: |
+            curl -X POST https://api.github.com/repos/PickAPoint/DDP_BDD/dispatches \
+            -H 'Accept: application/vnd.github.everest-preview+json' \
+            -u ${{ secrets.ACCESS_TOKEN }} \
+            --data '{"event_type": "ping", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'
 
