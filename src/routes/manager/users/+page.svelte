@@ -6,8 +6,6 @@
     import { session } from '$lib/session';
     import { goto } from '$app/navigation';
     
-    import "@carbon/styles/css/styles.css";
-    import "@carbon/charts/styles.css";
 
     let current_users = [];
     let request_users = [];

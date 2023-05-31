@@ -45,7 +45,8 @@
 
                 <Label class="space-y-2">
                     <span>Name</span>
-                    <Input 
+                    <Input
+                        id="companyName"
                         type="text"
                         name="companyName"
                         placeholder="Business Name"
@@ -56,7 +57,8 @@
 
                 <Label class="space-y-2">
                     <span>Email</span>
-                    <Input 
+                    <Input
+                        id="email"
                         type="email"
                         name="email"
                         placeholder="user@example.com"
@@ -67,7 +69,8 @@
 
                 <Label class="space-y-2">
                     <span>Your password</span>
-                    <Input 
+                    <Input
+                        id="password"
                         type="password"
                         name="password"
                         placeholder="•••••" 
@@ -78,7 +81,8 @@
 
                 <Label class="space-y-2">
                     <span>Contact</span>
-                    <Input 
+                    <Input
+                        id="contact"
                         type="text"
                         name="name"
                         placeholder="Business Contact"
@@ -89,7 +93,8 @@
 
                 <Label class="space-y-2">
                     <span>Address</span>
-                    <Input 
+                    <Input
+                        id="address"
                         type="text"
                         name="companyAddress"
                         placeholder="Business Address"
@@ -100,11 +105,11 @@
 
                 {#if loginError}
                     <Alert color="red">
-                        <span class="font-medium">Error!</span> Email already exists.
+                        <span id="error_msg" class="font-medium">Error!</span> Email already exists.
                     </Alert>
                 {/if}
 
-                <Button color="primary" type="submit" class="w-full">
+                <Button id="register_btn_form" color="primary" type="submit" class="w-full">
                     Register
                 </Button>
 
