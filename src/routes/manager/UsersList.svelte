@@ -15,7 +15,7 @@
 <Card padding="xl" size="">
     <div class="flex justify-between items-center mb-4">
         <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white">Pick Up Points</h5>
-        <a href="/manager/users" class="text-sm font-medium text-primary-900 hover:underline">
+        <a id="view_all" href="/manager/users" class="text-sm font-medium text-primary-900 hover:underline">
             View all
         </a>
     </div>

@@ -51,7 +51,8 @@
 
             <Label class="space-y-2">
                 <span>Email</span>
-                <Input 
+                <Input
+                    id="email"
                     type="email"
                     name="email"
                     placeholder="user@example.com"
@@ -62,7 +63,8 @@
 
             <Label class="space-y-2">
                 <span>Your password</span>
-                <Input 
+                <Input
+                    id="password"
                     type="password"
                     name="password"
                     placeholder="•••••" 
@@ -80,11 +82,11 @@
 
             {#if loginError}
                 <Alert color="red">
-                    <span class="font-medium">Error!</span> Invalid credentials or account waiting for approval.
+                    <span id="error_msg" class="font-medium">Error!</span> Invalid credentials or account waiting for approval.
                 </Alert>
             {/if}
 
-            <Button color="primary" type="submit" class="w-full">
+            <Button id="login_btn_form" color="primary" type="submit" class="w-full">
                 Login to your account
             </Button>
 

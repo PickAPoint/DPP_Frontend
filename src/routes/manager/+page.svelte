@@ -5,11 +5,7 @@
     import { session } from '$lib/session';
     import { onMount } from "svelte";
     import { goto } from '$app/navigation';
-    
-    import "@carbon/styles/css/styles.css";
-    import "@carbon/charts/styles.css";
 
-    // O admin vem de trás através do login
 
     onMount(async () => {
         if ($session.id === undefined || $session.type != "Admin") {
@@ -43,9 +39,7 @@
 
 
     <div>
-        <p class="text-4xl font-bold inline-block">{admin.name}</p>
-        <span class="font-extralight italic mx-1 text-lg">Administrator</span>
-        
+        <p class="text-4xl font-bold inline-block">Administrator</p>        
         <!-- <div class="mt-4 mb-11">
             <Button color="primary" on:click={() => true}>Manage Users</Button>
         </div> -->

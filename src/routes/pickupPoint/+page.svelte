@@ -140,25 +140,24 @@
           <span class="font-extralight italic mx-1 text-lg">Pick-up Point</span>
           
           <div class="mt-4 mb-11">
-              <Button color="primary" on:click={() => registerPackageModal = true}>Register Package</Button>
-              <Button color="primary" on:click={() => registerPickUpModal = true}>Register Pick Up</Button>
+              <Button id="register_package" color="primary" on:click={() => registerPackageModal = true}>Register Package</Button>
+              <Button id="register_pickup" color="primary" on:click={() => registerPickUpModal = true}>Register Pick Up</Button>
           </div>
       </div>
 
       <Stats packages={filteredPackages} />
 
-      {#if filteredPackages['stored'].length > 0}
-        <div class="mb-16">
-          <p class="text-2xl font-light">Stored Packages</p>
-          <StoredPackages storedPackages={filteredPackages['stored']} />
-        </div>
-      {/if}
-
-
       {#if filteredPackages['expected'].length > 0}
         <div class="mb-16">
           <p class="text-2xl font-light">Expected Packages</p>
           <ExpectedPackages expectedPackages={filteredPackages['expected']} />
+        </div>
+      {/if}
+
+      {#if filteredPackages['stored'].length > 0}
+        <div class="mb-16">
+          <p class="text-2xl font-light">Stored Packages</p>
+          <StoredPackages storedPackages={filteredPackages['stored']} />
         </div>
       {/if}
 
@@ -177,11 +176,12 @@
     class="flex flex-col space-y-6"
     on:submit|preventDefault={registerPackage}
   >
-    <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Register New Package</h3>
+    <h3 id="register_modal_title" class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Register New Package</h3>
 
     <Label class="space-y-2">
       <span>Package ID</span>
-      <Input 
+      <Input
+          id="register_modal_package_id"
           type="number"
           min="1"
           name="packageId"
@@ -193,11 +193,11 @@
 
     {#if errorRegisterPackage}
       <Alert color="red">
-          <span class="font-medium">Error!</span> Invalid Package ID.
+          <span id="register_error_msg" class="font-medium">Error!</span> Invalid Package ID.
       </Alert>
     {/if}
 
-    <Button type="submit" color="primary" class="w-full1">
+    <Button id="register_btn_form" type="submit" color="primary" class="w-full1">
       {#if loadingRegisterPackage}
         <Spinner class="mr-3" size="4" color="white" />
       {/if}
@@ -212,11 +212,12 @@
     class="flex flex-col space-y-6"
     on:submit|preventDefault={registerPickUp}
   >
-    <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Register Collected Package</h3>
+    <h3 id="collect_modal_title" class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Register Collected Package</h3>
 
     <Label class="space-y-2">
       <span>Package ID</span>
-      <Input 
+      <Input
+          id="collect_modal_package_id"
           type="number"
           min="1"
           name="packageId"
@@ -228,7 +229,8 @@
 
     <Label class="space-y-2">
       <span>Token</span>
-      <Input 
+      <Input
+          id="collect_modal_package_token"
           type="text"
           name="packageId"
           placeholder="Enter token received via SMS"
@@ -239,10 +241,10 @@
 
     {#if errorRegisterPickUp}
       <Alert color="red">
-          <span class="font-medium">Error!</span> Invalid Package ID or Token.
+          <span id="collect_error_msg" class="font-medium">Error!</span> Invalid Package ID or Token.
       </Alert>
     {/if}
 
-    <Button type="submit" color="primary" class="w-full1">Set as collected</Button>
+    <Button id="collect_btn_form" type="submit" color="primary" class="w-full1">Set as collected</Button>
   </form>
 </Modal>

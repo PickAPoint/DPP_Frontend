@@ -32,9 +32,9 @@
     <DarkMode class="mr-3" />
 
     {#if $session.id}
-      <Button color="primary" on:click={handleLogout}>Logout</Button>
+      <Button id="logout_btn_nav" color="primary" on:click={handleLogout}>Logout</Button>
     {:else}
-      <Button color="primary" href="login">Login</Button>
+      <Button id="login_btn_nav" color="primary" href="login">Login</Button>
     {/if}
 
     <NavHamburger on:click={toggle} class1="w-full md:flex md:w-auto md:order-1"/>
@@ -45,12 +45,12 @@
     {#if $session.id}
       
       {#if $session.type === 'Admin'}
-        <NavLi class="hover:text-primary-700 md:hover:text-primary-700 lg:hover:text-primary-700" href="/manager">Dashboard</NavLi>
-        <NavLi class="hover:text-primary-700 md:hover:text-primary-700 lg:hover:text-primary-700" href="/manager/users">PickUps</NavLi>
-        <NavLi class="hover:text-primary-700 md:hover:text-primary-700 lg:hover:text-primary-700" href="/manager/packages">Packages</NavLi>
+        <NavLi id="dashboard_admin_nav" class="hover:text-primary-700 md:hover:text-primary-700 lg:hover:text-primary-700" href="/manager">Dashboard</NavLi>
+        <NavLi id="pickups_admin_nav" class="hover:text-primary-700 md:hover:text-primary-700 lg:hover:text-primary-700" href="/manager/users">PickUps</NavLi>
+        <NavLi id="packages_admin_nav" class="hover:text-primary-700 md:hover:text-primary-700 lg:hover:text-primary-700" href="/manager/packages">Packages</NavLi>
       {:else if $session.type === 'Partner'}
-        <NavLi class="hover:text-primary-700 md:hover:text-primary-700 lg:hover:text-primary-700" href="/pickupPoint">Dashboard</NavLi>
-        <NavLi class="hover:text-primary-700 md:hover:text-primary-700 lg:hover:text-primary-700" href="/pickupPoint/packages">Packages</NavLi>
+        <NavLi id="dashboard_pick_nav" class="hover:text-primary-700 md:hover:text-primary-700 lg:hover:text-primary-700" href="/pickupPoint">Dashboard</NavLi>
+        <NavLi id="packages_pick_nav" class="hover:text-primary-700 md:hover:text-primary-700 lg:hover:text-primary-700" href="/pickupPoint/packages">Packages</NavLi>
       {/if}
 
     {/if}

@@ -22,7 +22,7 @@
 </script>
 
 <div class="mb-16">
-    <a href="/manager/packages" class="text-sm font-medium text-primary-900 hover:underline">
+    <a id="admin_packages" href="/manager/packages" class="text-sm font-medium text-primary-900 hover:underline">
     <p class="text-2xl font-light">Packages</p>
     </a>
 
