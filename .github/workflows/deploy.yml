@@ -16,5 +16,5 @@ jobs:
             export_default_credentials: true
       
         - name: Deploy to Google Cloud VM
-          run: gcloud compute ssh rafafergon@instance-1 --zone=europe-southwest1-a --command="cd /home/rafafergon/DPP_Frontend; git pull; sudo fuser -k 5173/tcp; /home/rafafergon/.nvm/versions/node/v18.16.0/bin/npm install node@18.16.0; nvm use; /home/rafafergon/.nvm/versions/node/v18.16.0/bin/npm i; /home/rafafergon/.nvm/versions/node/v18.16.0/bin/npm run build; /home/rafafergon/.nvm/versions/node/v18.16.0/bin/npm run preview -- --port 5173 --host &"
+          run: gcloud compute ssh rafafergon@instance-1 --zone=europe-southwest1-a --command="cd /home/rafafergon/DPP_Frontend; git pull; sudo fuser -k 5173/tcp; /home/rafafergon/.nvm/versions/node/v18.16.0/bin/npm i; /home/rafafergon/.nvm/versions/node/v18.16.0/bin/npm run build; (/home/rafafergon/.nvm/versions/node/v18.16.0/bin/npm run preview -- --port 5173 --host > /dev/null 2>&1 &)"
 
