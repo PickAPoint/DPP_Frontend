@@ -1,0 +1,12 @@
+Feature: Forecast daily air quality data for a given city
+  Scenario: Successful retrieval of air quality
+    When I navigate to the "Forecast" page
+    And I select "Aveiro" as the target city
+    And I click on the retrieve button
+    Then I should see a table with the results
+
+  Scenario: Unsuccessful retrieval of air quality
+    When I navigate to the "Forecast" page
+    And I select "Aveiro" as the target city
+    And I click on the retrieve button
+    And I should see a message "Results not found"

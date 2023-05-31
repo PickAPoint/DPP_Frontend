@@ -1,0 +1,38 @@
+package pt.ua.tqs.FunctionalTests.Pages;
+
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+public class CurrentAirQualityPage implements FormPage {
+    private WebDriver driver;
+
+    @FindBy(id = "city")
+    private WebElement city;
+
+    @FindBy(css = "button[type='button']")
+    private WebElement getAirQualityBtn;
+
+    public CurrentAirQualityPage(WebDriver driver, String baseUrl) {
+        this.driver = driver;
+        driver.get(baseUrl + "current/");
+        PageFactory.initElements(driver, this);
+    }
+
+    public void selectCity(String city) {
+        this.city.sendKeys(city);
+    }
+
+    public void clickGetAirQualityBtn() {
+        getAirQualityBtn.click();
+    }
+
+    public boolean isTableDisplayed() {
+        return driver.getPageSource().contains("table");
+    }
+
+    public boolean isMessageDisplayed() {
+        return driver.getPageSource().contains("span");
+    }
+}
